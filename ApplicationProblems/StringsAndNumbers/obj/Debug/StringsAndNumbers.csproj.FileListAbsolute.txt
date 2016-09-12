@@ -1,6 +1,0 @@
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\bin\Debug\StringsAndNumbers.exe.config
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\bin\Debug\StringsAndNumbers.exe
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\bin\Debug\StringsAndNumbers.pdb
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\obj\Debug\StringsAndNumbers.csprojResolveAssemblyReference.cache
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\obj\Debug\StringsAndNumbers.exe
-c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\StringsAndNumbers\obj\Debug\StringsAndNumbers.pdb

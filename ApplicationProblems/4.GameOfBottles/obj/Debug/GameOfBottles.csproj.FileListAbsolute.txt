@@ -1,0 +1,2 @@
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\GameOfBottles\bin\Debug\GameOfBottles.exe.config
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\GameOfBottles\bin\Debug\GameOfBottles.exe.config
