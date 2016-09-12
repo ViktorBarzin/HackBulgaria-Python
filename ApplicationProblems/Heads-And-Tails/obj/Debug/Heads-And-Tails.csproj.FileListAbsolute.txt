@@ -1,0 +1,6 @@
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.exe.config
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.exe
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.pdb
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\obj\Debug\Heads-And-Tails.csprojResolveAssemblyReference.cache
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\obj\Debug\Heads-And-Tails.exe
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Heads-And-Tails\obj\Debug\Heads-And-Tails.pdb

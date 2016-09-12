@@ -1,0 +1,6 @@
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\bin\Debug\Lakes.exe.config
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\bin\Debug\Lakes.exe
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\bin\Debug\Lakes.pdb
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\obj\Debug\Lakes.exe
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\obj\Debug\Lakes.pdb
+c:\users\viktor\documents\visual studio 2015\Projects\ApplicationProblems\Lakes\obj\Debug\Lakes.csprojResolveAssemblyReference.cache
