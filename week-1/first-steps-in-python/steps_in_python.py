@@ -58,7 +58,11 @@ def fibonacci(number):
     return numbers
 
 def fib_number(n):
-    return to_number(fibonacci(int(n))) 
+    fibonaccis = fibonacci(n)
+    concat = ''
+    for dig in fibonaccis:
+        concat += str(dig)
+    return concat
 
 print sum_of_digit(1325132435356)
 print to_digits(123)
