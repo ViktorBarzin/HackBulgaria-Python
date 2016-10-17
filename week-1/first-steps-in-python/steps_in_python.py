@@ -79,4 +79,3 @@ print fibonacci(10)
 print fib_number(10)
 print is_palindrome(121)
 
-
