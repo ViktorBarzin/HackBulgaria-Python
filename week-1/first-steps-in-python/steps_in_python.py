@@ -68,6 +68,16 @@ def is_palindrome(obj):
     obj = str(obj)
     return obj == obj[::-1]
 
+def char_histogram(string):
+    string = str(string)
+    hist = {}
+    for char in string:
+        if char not in hist:
+            hist[char] = 1
+        else:
+            hist[char] += 1
+    return hist
+
 print sum_of_digit(1325132435356)
 print to_digits(123)
 print to_number(['1','2','3'])
@@ -78,4 +88,4 @@ print fact_digits(145)
 print fibonacci(10)
 print fib_number(10)
 print is_palindrome(121)
-
+print char_histogram('aabbbccccd')
