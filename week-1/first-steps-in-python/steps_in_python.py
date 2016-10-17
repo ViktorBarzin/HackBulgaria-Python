@@ -64,6 +64,10 @@ def fib_number(n):
         concat += str(dig)
     return concat
 
+def is_palindrome(obj):
+    obj = str(obj)
+    return obj == obj[::-1]
+
 print sum_of_digit(1325132435356)
 print to_digits(123)
 print to_number(['1','2','3'])
@@ -73,3 +77,4 @@ print is_prime_number(98)
 print fact_digits(145)
 print fibonacci(10)
 print fib_number(10)
+print is_palindrome(121)
