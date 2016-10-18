@@ -90,15 +90,15 @@ def char_histogram(string):
             hist[char] += 1
     return hist
 
-print sum_of_digit(1325132435356)
-print to_digits(123)
-print to_number(['1','2','3'])
-print count_vowels('Github is the second best thing that happend to programmers, after the keyboard!')
-print count_consonants('Github is the second best thing that happend to programmers, after the keyboard!')
-print is_prime_number(98)
-print fact_digits(145)
-print fibonacci(10)
-print fib_number(10)
-print is_palindrome(121)
-print char_histogram('aabbbccccd')
+print(sum_of_digit(1325132435356))
+print(to_digits(123))
+print(to_number(['1','2','3']))
+print(count_vowels('Github is the second best thing that happend to programmers, after the keyboard!'))
+print(count_consonants('Github is the second best thing that happend to programmers, after the keyboard!'))
+print(is_prime_number(98))
+print(fact_digits(145))
+print(fibonacci(10))
+print(fib_number(10))
+print(is_palindrome(121))
+print()(char_histogram('aabbbccccd'))
 
