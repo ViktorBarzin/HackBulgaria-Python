@@ -8,10 +8,22 @@ def sum_of_digit(n):
     return sum_of_digits
 
 def to_digits(n):
-    return [x for x in str(n)]
+    digits = []
+    while n > 0:
+        digit_to_add = n % 10
+        n /= 10
+        digits.append(digit_to_add)
+    digits = digits[::-1]
+    return digits
+
 
 def to_number(digits):
-    return int(''.join(x for x in digits))
+    digits = digits[::-1]
+    final_number = 0
+    for i in range(len(digits)):
+        final_number += int(digits[i]) * 10**i
+    return final_number
+
 
 def count_vowels(string):
     vowels = 'aeiouy'
@@ -89,3 +101,4 @@ print fibonacci(10)
 print fib_number(10)
 print is_palindrome(121)
 print char_histogram('aabbbccccd')
+
