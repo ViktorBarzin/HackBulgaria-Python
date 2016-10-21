@@ -27,9 +27,13 @@ def increasing_or_decreasing(seq):
 
 
 def get_largest_palindrome(n):
-    pass
+    for x in range(n-1, 0, -1):
+        if is_palindrome(x):
+            return x
 
 
 def is_palindrome(obj):
     obj = str(obj)
     return obj == obj[::-1]
+
+print(get_largest_palindrome(252))
