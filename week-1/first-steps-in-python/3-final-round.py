@@ -41,4 +41,15 @@ def get_largest_palindrome(n):
 def sum_of_numbers(str):
     return sum([int(x) for x in re.findall('[\d]+', str)])
 
-print(sum_of_numbers('1abc33xyz22'))
+
+def birthday_ranges(birthdays, ranges):
+    counter_dict = {range: 0 for range in ranges}
+    for bday in birthdays:
+        counter = 0
+        for range in ranges:
+            if bday >= range[0] and bday <= range[1]:
+                counter_dict[range] += 1
+    return [counter_dict[x] for x in ranges]
+
+
+
