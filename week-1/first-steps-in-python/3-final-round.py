@@ -1,3 +1,5 @@
+import re
+
 def is_number_balanced(n):
     n = str(n)
     if len(n) % 2 == 1:
@@ -27,13 +29,16 @@ def increasing_or_decreasing(seq):
 
 
 def get_largest_palindrome(n):
+    def is_palindrome(obj):
+        obj = str(obj)
+        return obj == obj[::-1]
+
     for x in range(n-1, 0, -1):
         if is_palindrome(x):
             return x
 
 
-def is_palindrome(obj):
-    obj = str(obj)
-    return obj == obj[::-1]
+def sum_of_numbers(str):
+    return sum([int(x) for x in re.findall('[\d]+', str)])
 
-print(get_largest_palindrome(252))
+print(sum_of_numbers('1abc33xyz22'))
