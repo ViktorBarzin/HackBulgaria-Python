@@ -15,10 +15,3 @@ def gas_stations(distance, tank_size, stations):
             size = tank_size
     return res[1:]
 
-st = [50, 80, 110, 180, 220, 290]
-st2 = [70, 90, 140, 210, 240, 280, 350]
-print(are_anagrams('ad', 'bc'))
-# gas_stations(320, 90, st)
-gas_stations(320, 90, st)
-
-# todo : fix logic :O
