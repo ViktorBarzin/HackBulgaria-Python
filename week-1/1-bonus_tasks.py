@@ -4,34 +4,16 @@ def are_anagrams(s1, s2):
 
 
 def gas_stations(distance, tank_size, stations):
-    # max_tank_size = tank_size
-    # i = 0
-    # previous = stations[0]
-    # recharging_stations = []
-    # print(stations)
-    #
-    # while i < len(stations) and stations[i] + max_tank_size < distance:
-        # # c = 0
-        # if i == 0:
-        #     j = i
-        #     while tank_size > stations[j]:
-        #         previous = stations[j]
-        #         j += 1
-        #     recharging_stations.append(previous)
-        # else:
-        #     j = i
-        #
-        #     tank_size = max_tank_size + stations[i]
-        #
-        #     while j < len(stations) and tank_size > stations[j]:
-        #         previous = stations[j]
-        #         j += 1
-        #         # c += 1
-        #     recharging_stations.append(previous)
-        #
-        # i += 1
-
-    print(recharging_stations)
+    res = [0]
+    stations.append(distance)
+    for i in range(len(stations) - 1):
+        diff = stations[i + 1] - stations[i]
+        size = tank_size - (stations[i] - res[-1])
+        print(size)
+        if size < diff:
+            res.append(stations[i])
+            size = tank_size
+    return res[1:]
 
 st = [50, 80, 110, 180, 220, 290]
 st2 = [70, 90, 140, 210, 240, 280, 350]
