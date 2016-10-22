@@ -45,9 +45,8 @@ def sum_of_numbers(str):
 def birthday_ranges(birthdays, ranges):
     counter_dict = {range: 0 for range in ranges}
     for bday in birthdays:
-        counter = 0
         for range in ranges:
-            if bday >= range[0] and bday <= range[1]:
+            if range[1] >= bday >= range[0]:
                 counter_dict[range] += 1
     return [counter_dict[x] for x in ranges]
 
