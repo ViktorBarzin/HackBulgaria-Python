@@ -1,5 +1,5 @@
 import re
-
+from math import *
 
 def are_anagrams(s1, s2):
     # works for current purpose, but I guess there are more efficient solutions
@@ -34,3 +34,28 @@ def reduce_file_path(path):
     elif len(result) == 1 and re.match('[a-zA-Z]', result[0]):
         return '/' + result[0]
     return '/' + '/'.join(result)
+
+
+def goldbach(number):
+    # Check if given number is prime
+    def is_prime(n):
+        if n <= 1:
+            return False
+        for i in range(2, int(sqrt(n) + 1.0)):
+            if n % i == 0:
+                return False
+        return True
+
+    # Find all primes up to input number
+    primes_to_number = [x for x in range(2, number + 1) if is_prime(x)]
+    results = []
+
+    # Algorithm for finding Goldbach numbers
+    for prime in primes_to_number:
+        if is_prime(number - prime):
+            results.append((prime, number - prime))
+
+    # Format output so only unique values are returned
+    if len(results) % 2 == 0:
+        return sorted(results)[:len(results)//2:]
+    return sorted(results)[:len(results)//2 + 1:]
