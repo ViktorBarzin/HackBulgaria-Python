@@ -1,6 +1,7 @@
 import re
 from math import *
 
+
 def are_anagrams(s1, s2):
     # works for current purpose, but I guess there are more efficient solutions
     return hash(str(sorted(s1.lower()))) == hash(str(sorted(s2.lower())))
