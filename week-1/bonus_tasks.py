@@ -60,3 +60,25 @@ def goldbach(number):
     if len(results) % 2 == 0:
         return sorted(results)[:len(results)//2:]
     return sorted(results)[:len(results)//2 + 1:]
+
+
+def is_credit_card_valid(number):
+    def extract_digits(n):
+        digits = []
+        while n > 0:
+            digits.append(n % 10)
+            n //= 10
+        return digits
+
+    reversed_number = list(reversed([int(x) for x in str(number)]))
+
+    if len(reversed_number) % 2 == 0:
+        return False
+
+    doubles = [x * 2 for x in reversed_number[1::2]]
+    evens = [x for x in reversed_number[::2]]
+    reversed_number = [None] * (len(doubles) + len(evens))
+    reversed_number[1::2] = doubles
+    reversed_number[::2] = evens
+
+    return (sum([sum(extract_digits(x)) for x in reversed_number])) % 10 == 0
