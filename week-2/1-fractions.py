@@ -35,5 +35,3 @@ def sort_fractions(fractions):
                 result.append(f)
 
     return result
-
-sort_fractions([(2, 3), (1, 2), (1, 3)])
