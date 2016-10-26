@@ -61,12 +61,17 @@ def du(f, parameters):
 def wc(file_path, param):
     # Hope that file closes after this function
     if 'chars' in param:
+        # ATTENTION!The solution below is really messed up so it is commented as legacy due to newer and better solution
+        # ----------------------------------------------
         # Do magic to count characters
-        return sum([len(x) for x in re.split(' ', re.sub('\n', ' ', open(file_path, 'r').read()))])
+        # and add the magic one which fixes a bug with original wc implementation
+        # return sum([len(x) for x in re.split(' ', re.sub('\n', ' ', open(file_path, 'r').read()))]) + int(open(file_path, 'r').read().count(' ')) + 1
+        # ---------------------------------------------
+
+        return len(re.sub('\n', ' ', open(file_path, 'r').read()))
     if 'words' in param:
         # words
-
-        pass
+        return len([x for x in re.split('\s+', open(file_path, 'r').read()) if x != ''])
     if 'lines' in param:
         # lines
         return len(open(file_path, 'r').readlines())
