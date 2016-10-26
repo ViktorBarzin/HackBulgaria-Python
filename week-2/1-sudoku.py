@@ -1,4 +1,5 @@
 
+
 def sudoku_solved(sudoku, characters = range(1, 10)):
     def check_for_repeating(sudoku):
         for row in sudoku:
@@ -38,4 +39,3 @@ print(sudoku_solved([
 [8, 9, 6, 7, 4, 3, 1, 5, 2],
 [2, 4, 3, 6, 1, 5, 9, 8, 7]
 ]))
-
