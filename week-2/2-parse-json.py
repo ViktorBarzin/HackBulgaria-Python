@@ -21,25 +21,21 @@ def get_languages_from_json_dict(json_dict):
     for person in json_dict[JSON_DICT_PEOPLE_ENTRY]:
         for skill in person[SKILLS_FIELD]:
             languages.append(skill[SKILL_NAME_FIELD])
-    # print(' '.join(set(languages)))
     return set(languages)
 
 
 def get_best_from_each_language(json_dict):
     languages = get_languages_from_json_dict(json_dict)
     lang_max_score = {x:0 for x in languages}
-    lang_max_score_name =  {}
+    lang_max_score_name = {}
 
     for person in json_dict[JSON_DICT_PEOPLE_ENTRY]:
         for skill in person[SKILLS_FIELD]:
             skill_name = skill[SKILL_NAME_FIELD]
             if lang_max_score[skill_name] < skill[SKILL_LEVEL_FIELD]:
                 lang_max_score[skill_name] = skill[SKILL_LEVEL_FIELD]
-                lang_max_score_name[skill_name] = person[PERSON_FIRST_NAME_FIELD] + ' ' +person[PERSON_LAST_NAME_FIELD]
-    formated = ''
-    for key in lang_max_score_name.keys():
-        formated += key + ' - ' + lang_max_score_name[key] + '\n'
-    return formated
+                lang_max_score_name[skill_name] = person[PERSON_FIRST_NAME_FIELD] + ' ' + person[PERSON_LAST_NAME_FIELD]
+    return '\n'.join([(key + ' - ' + lang_max_score_name[key]) for key in lang_max_score_name.keys()])
 
 
 def main():
