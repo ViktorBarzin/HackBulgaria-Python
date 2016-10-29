@@ -26,7 +26,7 @@ def get_languages_from_json_dict(json_dict):
 
 def get_best_from_each_language(json_dict):
     languages = get_languages_from_json_dict(json_dict)
-    lang_max_score = {x:0 for x in languages}
+    lang_max_score = {x: 0 for x in languages}
     lang_max_score_name = {}
 
     for person in json_dict[JSON_DICT_PEOPLE_ENTRY]:
