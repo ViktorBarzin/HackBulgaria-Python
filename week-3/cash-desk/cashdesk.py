@@ -1,11 +1,6 @@
 from collections import defaultdict
 
 
-class CashDesk:
-    def __init__(self):
-        self.total = 0
-
-
 class Bill:
     def __init__(self, value):
         self._is_int_and_positive(value)
@@ -77,6 +72,7 @@ class CashDesk:
             self.__inventory[str(money)] += 1
 
     def inspect(self):
+        # Inspects content and prints it in human a readable way
         return self.inspect_message + ''.join(
             [('\n' + str(key) + '$ bills - ' + str(self.__inventory[key])) for key in self.get_inventory()])
 
