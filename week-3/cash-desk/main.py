@@ -1,14 +1,12 @@
-from cashdesk import Bill, BillBatch
+from cashdesk import Bill, BillBatch, CashDesk
 
-values = [10, 20, 50, 100]
+values = [10, 20, 50, 50, 100]
 bills = [Bill(value) for value in values]
 
 batch = BillBatch(bills)
 
-for bill in batch:
-    print(bill)
+cashd = CashDesk()
+cashd.take_money(batch)
 
-# A 10$ bill
-# A 20$ bill
-# A 50$ bill
-# A 100$ bill
+print(cashd.inspect())
+

@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 class CashDesk:
     def __init__(self):
         self.total = 0
@@ -37,27 +39,16 @@ class Bill:
 class BillBatch:
     def __init__(self, bills):
         self.is_list_of_bills(bills)
-        self.bills = bills
+        self._bills = bills
 
     def __len__(self):
-        return len(self.bills)
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        if self.i < self.n:
-            i = self.i
-            self.i += 1
-            return i
-        else:
-            raise StopIteration()
+        return len(self._bills)
 
     def total(self):
-        return sum(self.bills)
+        return sum(self._bills)
 
     def get_bills(self):
-        return self.bills
+        return self._bills
 
     @classmethod
     def is_list_of_bills(cls, list_of_bills):
@@ -68,3 +59,30 @@ class BillBatch:
                 raise TypeError('Not all elements are Bills')
         return True
 
+
+class CashDesk:
+    def __init__(self):
+        self.__total = 0
+        self.__inventory = defaultdict(int)
+
+    def take_money(self, money):
+        if isinstance(money, BillBatch):
+            for bill in money.get_bills():
+                self.__total += int(bill)
+                self.__inventory[int(bill)] += 1
+        elif isinstance(money, Bill):
+            self.__total += int(money)
+            self.__inventory[str(money)] += 1
+
+    def inspect(self):
+        result = 'We have the following count of bills, sorted in ascending order:'
+        for key in sorted(self.__inventory.keys()):
+            result += '\n{0}$ bills - {1}'.format(key, self.__inventory[key])
+        return result
+
+    def get_inventory(self):
+        return self.__inventory
+
+
+    def total(self):
+        return 'We have a total of {0}$ in the desk'.format(int(Bill))
