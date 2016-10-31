@@ -8,5 +8,7 @@ batch = BillBatch(bills)
 cashd = CashDesk()
 cashd.take_money(batch)
 
-print(cashd.inspect())
+# print(cashd.inspect())
+print(cashd.total())
+# print(cashd._CashDesk__inventory)
 

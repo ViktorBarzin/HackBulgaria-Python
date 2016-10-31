@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+
 class CashDesk:
     def __init__(self):
         self.total = 0
@@ -64,6 +65,7 @@ class CashDesk:
     def __init__(self):
         self.__total = 0
         self.__inventory = defaultdict(int)
+        self.inspect_message = 'We have the following count of bills, sorted in ascending order:'
 
     def take_money(self, money):
         if isinstance(money, BillBatch):
@@ -75,14 +77,11 @@ class CashDesk:
             self.__inventory[str(money)] += 1
 
     def inspect(self):
-        result = 'We have the following count of bills, sorted in ascending order:'
-        for key in sorted(self.__inventory.keys()):
-            result += '\n{0}$ bills - {1}'.format(key, self.__inventory[key])
-        return result
+        return self.inspect_message + ''.join(
+            [('\n' + str(key) + '$ bills - ' + str(self.__inventory[key])) for key in self.get_inventory()])
 
     def get_inventory(self):
         return self.__inventory
 
-
     def total(self):
-        return 'We have a total of {0}$ in the desk'.format(int(Bill))
+        return 'We have a total of {0}$ in the desk'.format(self.__total)
