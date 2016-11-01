@@ -1,0 +1,10 @@
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.exe.config
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.exe
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\Heads-And-Tails\bin\Debug\Heads-And-Tails.pdb
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\Heads-And-Tails\obj\Debug\Heads-And-Tails.exe
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\Heads-And-Tails\obj\Debug\Heads-And-Tails.pdb
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\1.Heads-And-Tails\bin\Debug\Heads-And-Tails.exe.config
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\1.Heads-And-Tails\obj\Debug\Heads-And-Tails.exe
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\1.Heads-And-Tails\obj\Debug\Heads-And-Tails.pdb
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\1.Heads-And-Tails\bin\Debug\Heads-And-Tails.exe
+C:\Users\Viktor\Desktop\HackBulgaria-Python\ApplicationProblems\1.Heads-And-Tails\bin\Debug\Heads-And-Tails.pdb
