@@ -1,5 +1,5 @@
 from fraction import *
 
-f = Fraction(4, 2)
-a = Fraction(1, 2)
-print(a / f)
+a = Fraction(24, 58)
+#a = Fraction(1, 2)
+print(a.simplify_fraction())
