@@ -6,7 +6,6 @@ def get_first_derivative(equation, var):
     res = [differentiate(x, var) for x in monomials if x != '+' and x != '-' and not re.match('^[0-9]$', x)]
     if len(res) == 0:
         return '0'
-    print(res)
     return '+'.join(res)
 
 
@@ -31,5 +30,15 @@ def differentiate(monomial, variable):
             return str(power * coeff) + '*' + variable
         return str(power * coeff)
 
-# print(get_first_derivative('4 + y + y^1 + y^3 + 2*y^3 + 3*y^2 + 6*y^4', 'y'))
-# print(get_first_derivative('4*x^3', 'x'))
+
+def main():
+    # print(get_first_derivative('4 + y + y^1 + y^3 + 2*y^3 + 3*y^2 + 6*y^4', 'y'))
+    # print(get_first_derivative('4*x^3', 'x'))
+    print(get_first_derivative('2*x^3 + x', 'x'))
+    print(get_first_derivative('1', 'x'))
+    print(get_first_derivative('x^4 + 10*x^3', 'x'))
+    print(get_first_derivative('x^2 + 1', 'x'))
+    print(get_first_derivative('3*x^2', 'x'))
+
+if __name__ == '__main__':
+    main()
