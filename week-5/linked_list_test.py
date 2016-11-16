@@ -76,10 +76,10 @@ class LinkedListTest(unittest.TestCase):
         self.ll.add_linked_list(new_ll)
         self.assertEqual([1, 10, 100], self.ll.to_list())
 
-    # def test_ll_from_to(self):
-    #     self.ll.add_element(0)
-    #     self.ll.add_list([1, 10, 100, 1000])
-    #     self.assertEqual([10, 100], self.ll.ll_from_to(1, 2).to_list())
+    def test_ll_from_to(self):
+        self.ll.add_element(0)
+        self.ll.add_list([1, 10, 100, 1000])
+        self.assertEqual([10, 100], self.ll.ll_from_to(2, 3).to_list())
 
     def test_pop(self):
         self.ll.add_element(1)

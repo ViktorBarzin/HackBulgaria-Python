@@ -88,13 +88,13 @@ class LinkedList:
         self.add_list(a)
         self.__size += len(linked_list)
 
-    # todo: fix
     def ll_from_to(self, start_index, end_index):
         new_ll = LinkedList()
         head = self.index(start_index)
-        for i in range(end_index - start_index):
-            new_ll.add_element(head)
+        for i in range(end_index - start_index + 1):
+            new_ll.add_element(head.value)
             head = head.next_item
+        print(type(new_ll))
         return new_ll
 
     def pop(self):
