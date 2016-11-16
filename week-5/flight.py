@@ -26,4 +26,4 @@ class Flight:
     and self.declined == other.declined
 
     def get_flight_duration(self):
-        return 
+        return
