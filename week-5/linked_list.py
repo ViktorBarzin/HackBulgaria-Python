@@ -1,3 +1,4 @@
+# Works legit with proper input, need input validation tho..
 class LinkedList:
     def __init__(self, initial_size=0):
         self.__size = initial_size
