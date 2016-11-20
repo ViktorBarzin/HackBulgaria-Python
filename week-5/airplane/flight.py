@@ -27,3 +27,4 @@ class Flight:
 
     def get_flight_duration(self):
         return
+
