@@ -1,6 +1,6 @@
 class Tree:
     def __init__(self, root):
-        self.root = Node(root, depth=0)
+        self.root = Node(root)
     """
     When we are creating a new tree, we must always have a root element.
     For example:
@@ -8,14 +8,13 @@ class Tree:
     """
 
     def add_child(self, parent, child):
-        parent = Node(parent, depth=parent.depth)
-        if parent.value == self.root.value:
-            new_node = Node(child, parent=parent, depth=1)
-            self.root.children.append(new_node)
-        else:
-            print('Creating {0} with parent {1}'.format(child, parent.depth))
-            new_node = Node(child, parent=parent, depth=parent.depth + 1)
-            parent.children.append(new_node)
+        p_value = parent
+        parent = self.__get(parent, self.root)
+        print('Parent :' + str(parent.value))
+        if parent:
+            print('Added :' + str(child))
+            return parent.children.append(Node(child, parent=parent))
+        raise Exception('Parent {0} does not exists!'.format(p_value))
 
     """
     When we are adding new element to our tree, we must specify the parent:
@@ -33,6 +32,15 @@ class Tree:
     2
     """
 
+    def __get(self, to_find, root):
+        if root == Node(to_find):
+            return root
+        if root.has_children():
+            for child in root.children:
+                print(child)
+                return self.__get(to_find, child)
+        return False
+
     def find(self, x):
         visited, queue = set(), [self.root]
         while queue:
@@ -49,18 +57,14 @@ class Tree:
     """
 
     def height(self):
-        max_height = 0
-        visited, queue = set(), [self.root]
-        while queue:
-            current = queue.pop()
-            print(current.value, current.depth)
-            if current.depth > max_height:
-                max_height = current.depth
-            if current.has_children() and current not in visited:
-                queue.extend(current.children)
-                for child in current.children:
-                    visited.add(child)
-        return max_height
+        return self.__height(self.root, 0)
+
+    def __height(self, root, curr_height):
+        print([x.value for x in root.children])
+        if not root.children:
+            return curr_height
+        for child in root.children:
+            return self.__height(child, curr_height + 1)
 
     """
         Returns an integer number of the max height of the tree
@@ -89,17 +93,16 @@ class Tree:
 
 
 class Node:
-    def __init__(self, value, depth,parent=None, children=[],):
+    def __init__(self, value, parent=None, children=[]):
         self.value = value
         self.children = children
         self.parent = parent
-        self.depth = depth
 
     def __eq__(self, other):
         return self.value == other.value
 
     def __hash__(self):
-        return self.value
+        return self.value 
 
     def has_children(self):
         return len(self.children) > 0
