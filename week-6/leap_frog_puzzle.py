@@ -24,7 +24,7 @@ class Lake:
         current_sol, best_sol = [], []
         while stack:
             # print(current_sol)
-            current = stack.popleft()
+            current = stack.pop()
             current_sol.append(current.value)
             current_height += 1
 
@@ -38,36 +38,36 @@ class Lake:
                     best_sol = current_sol
                 current_sol.pop()
                 current_height -= 1
-        return len(best_sol[::2])
+        return best_sol[::]
+
     @staticmethod
     def generate_possible_moves(position):
         # >>_><<<
         moves = []
         for i in range(len(position)):
             if position[i] == '>':
+                if i + 1 < len(position) and position[i + 1] == '_':
+                    new_move = list(position)
+                    new_move[i] = '_'
+                    new_move[i + 1] = '>'
+                    moves.append(''.join(new_move))
                 if i + 2 < len(position) and position[i + 2] == '_':
                     new_move = list(position)
                     new_move[i] = '_'
                     new_move[i + 2] = '>'
                     moves.append(''.join(new_move))
-                elif i + 1 < len(position) and position[i + 1] == '_':
+            elif position[i] == '<':
+                if i - 1 >= 0 and position[i - 1] == '_':
                     new_move = list(position)
                     new_move[i] = '_'
-                    new_move[i + 1] = '>'
+                    new_move[i - 1] = '<'
                     moves.append(''.join(new_move))
-            elif position[i] == '<':
                 if i - 2 >= 0 and position[i - 2] == '_':
                     new_move = list(position)
                     new_move[i] = '_'
                     new_move[i - 2] = '<'
                     moves.append(''.join(new_move))
-                elif i - 1 >= 0 and position[i - 1] == '_':
-                    new_move = list(position)
-                    new_move[i] = '_'
-                    new_move[i - 1] = '<'
-                    moves.append(''.join(new_move))
         return deque(Frog(x) for x in moves)
-
 
 def main():
     l = Lake('>>>_<<<')
