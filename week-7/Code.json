@@ -1,20 +1,20 @@
 [
     {
-        "_Song__length": "3:44",
+        "album": "The Sons of Odin",
+        "title": "Gosho",
         "artist": "Manowmmmar",
-        "album": "The Sons of Odin",
-        "title": "Gosho"
+        "_Song__length": "3:44"
     },
     {
-        "_Song__length": "3:44",
-        "artist": "Manowar",
         "album": "The Sons of Odin",
-        "title": "Odin"
+        "title": "Odin",
+        "artist": "Manowar",
+        "_Song__length": "3:44"
     },
     {
-        "_Song__length": "3:44",
-        "artist": "Manowar",
         "album": "The Sons of Odin",
-        "title": "Odin"
+        "title": "Odin",
+        "artist": "Manowar",
+        "_Song__length": "3:44"
     }
 ]
