@@ -47,8 +47,8 @@ class Song:
             return self.__calculate_len_in_seconds() / 3600
 
     def serialize(self):
+        # print(self.__dict__)
         return self.__dict__
-
 
 class Playlist:
     def __init__(self, name, repeat=False, shuffle=False):
@@ -111,19 +111,28 @@ class Playlist:
             table.add_row([song.artist, song.title, song.length()])
         print(table)
 
-    def save(self, path=os.getcwd() + os.path.sep):
-        with open(path + self.name + '.json', 'w') as w:
-            res = []
-            for song in self.__songs:
-                res.append(song.serialize())
-            json.dump(res, w, indent=4)
+    def save(self, path=os.getcwd() + os.path.sep + 'playlist-data' + os.sep):
+        # todo: use __dict__ instead of dict()
+        with open(path + inflection.parameterize(self.name) + '.json', 'w') as w:
+            json.dump(dict(name=self.name, shuffle=self.shuffle, repeated=self.repeat,
+                           songs=[song.serialize() for song in self.__songs],
+                           length=self.__length, played_songs=self.__played_songs,
+                           current_index=self.__current_index), w, indent=4)
+    @staticmethod
+    def load(path):
+        with open(path, 'r') as r:
+            playlist = Playlist()
+            j = json.load(r)
+            # print(j)
+            return Playlist(**j)
 
-
-s = Song(title="Gosho", artist="Manowmmmar", album="The Sons of Odin", length="3:44")
-s1 = Song(title="Odin", artist="Manowar", album="The Sons of Odin", length="3:44")
-s2 = Song(title="Odin", artist="Manowar", album="The Sons of Odin", length="3:44")
-code_songs = Playlist(name="Code", repeat=True, shuffle=True)
+s = Song(title="Gosho", artist="Manowmmmar", album="The Sons of Odin", length="34:44")
+s1 = Song(title="Odin", artist="pesho", album="The Sons of Odin", length="3:44")
+s2 = Song(title="Odin", artist="Manowar", album="The Sons of Odin", length="1:3:44")
+code_songs = Playlist(name="Python is the best", repeat=True, shuffle=True)
 code_songs.add_songs([s, s1, s2])
-code_songs.pprint_playlist()
+# code_songs.pprint_playlist()
 code_songs.save()
+# code_songs = Playlist.load(os.getcwd() + '/playlist-data/python-is-the-best.json')
 
+# print(code_songs.next_song())
