@@ -1,3 +1,5 @@
+# Task can be found here: https://github.com/HackBulgaria/Programming101-Python-2016/tree/master/week07/MusicLibrary
+
 import random
 import json
 import inflection
