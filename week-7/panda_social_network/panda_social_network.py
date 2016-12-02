@@ -24,7 +24,7 @@ class Panda:
 
     @staticmethod
     def __check_email(email):
-        return re.match('[a-zA-Z]+@[a-zA-Z]+\.', email)
+        return re.match('[a-zA-Z0-9]+@[a-zA-Z0-9]+\.', email)
 
     def name(self):
         return self.__name
@@ -76,17 +76,33 @@ class PandaSocialNetwork:
         visited = [panda1]
         queue = [panda1]
         counter = 0
-
         while queue:
             current = queue.pop()
-            counter += 1
-            print([x.name() for x in self.network[current]])
-            print(current.name(), panda2.name())
             if current == panda2:
                 return counter
+            counter += 1
             for friend in self.network[current]:
                 if friend not in visited:
                     visited.append(friend)
-                    queue.extend(self.network[friend])
+                    queue.append(friend)
         return -1
 
+    def are_connected(self, panda1, panda2):
+        return self.connection_level(panda1, panda2) != -1
+
+    def how_many_gender_in_network(self, level, panda, gender):
+        visited = [panda]
+        queue = [panda]
+        counter = 0
+        gender_counter = 0
+        while queue:
+            current = queue.pop()
+            if current.gender() == gender:
+                gender_counter += 1
+            counter += 1
+
+            for friend in self.network[current]:
+                if friend not in visited and counter <= level:
+                    visited.append(friend)
+                    queue.append(friend)
+        return gender_counter
