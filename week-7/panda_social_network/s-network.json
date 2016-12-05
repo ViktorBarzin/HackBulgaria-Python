@@ -1,0 +1,24 @@
+{
+    "members": [
+        {
+            "_Panda__name": "Tony",
+            "_Panda__email": "tony@pandamail.com",
+            "_Panda__gender": "female"
+        },
+        {
+            "_Panda__name": "Ivo",
+            "_Panda__email": "ivo@pandamail.com",
+            "_Panda__gender": "male"
+        },
+        {
+            "_Panda__name": "Tony2",
+            "_Panda__email": "tony23@pandamail.com",
+            "_Panda__gender": "female"
+        },
+        {
+            "_Panda__name": "Rado",
+            "_Panda__email": "rado@pandamail.com",
+            "_Panda__gender": "male"
+        }
+    ]
+}

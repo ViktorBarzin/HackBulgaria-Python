@@ -1,3 +1,5 @@
+# Task can be found here: https://github.com/HackBulgaria/Programming101-Python-2016/tree/master/week07/PandaSocialNetwork
+
 from panda_social_network import *
 
 network = PandaSocialNetwork()
@@ -13,6 +15,4 @@ network.make_friends(ivo, rado)
 network.make_friends(rado, tony)
 network.make_friends(tony, tony2)
 
-# print(network.friends_of(tony)[0].name())
-
-print(network.how_many_gender_in_network(1, rado, "female")) # True
+print(network.save('s-network.json'))

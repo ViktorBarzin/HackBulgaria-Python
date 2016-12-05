@@ -1,4 +1,5 @@
 import re
+import json
 from exceptions import *
 
 
@@ -35,11 +36,14 @@ class Panda:
     def gender(self):
         return self.__gender
 
-    def is_male(self):
+    def isMale(self):
         return 'male' in self.__gender
 
-    def is_female(self):
-        return not self.is_male()
+    def isFemale(self):
+        return not self.isMale()
+
+    def serialize(self):
+        return self.__dict__
 
 
 class PandaSocialNetwork:
@@ -97,7 +101,7 @@ class PandaSocialNetwork:
         gender_counter = 0
         while queue:
             current = queue.pop()
-            if current.gender() == gender:
+            if current.gender() == gender and current != panda:
                 gender_counter += 1
             counter += 1
 
@@ -106,3 +110,8 @@ class PandaSocialNetwork:
                     visited.append(friend)
                     queue.append(friend)
         return gender_counter
+
+    def save(self, file_path):
+        with open(file_path, 'w') as w:
+            json.dump(dict(members=[x.serialize() for x in self.network]), w, indent=4)
+        print(dict(members=[x.serialize() for x in self.network]))
