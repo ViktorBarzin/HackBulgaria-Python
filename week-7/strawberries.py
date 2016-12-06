@@ -1,3 +1,6 @@
+# Task can be found here: https://github.com/HackBulgaria/Programming101-Python-2016/blob/master/week07/Strawberries/task_strawberries.pdf
+
+
 def strawberries(rows, cols, days, dead_strawberries):
     field = [[True for x in range(cols)] for y in range(rows)]
 
