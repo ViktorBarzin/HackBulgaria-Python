@@ -1,0 +1,35 @@
+-- select ship name, country, cannons and launched
+
+select s.name, c.numguns, s.launched, c.country
+from ships as s
+join classes as c
+on s.class = c.class;
+
+-- select ship name, country, cannons and launched + no ships in class, but ships with same name exist
+
+select s.name, c.numguns, s.launched, c.country, c.class
+from classes as c
+left join ships as s
+on s.class = c.class 
+where c.class = s.name;
+
+-- ships participated in 'North Cape'
+
+select s.name
+from ships as s
+ join outcomes as o
+on o.ship = s.name
+join battles as b
+on o.battle = b.name
+where b.name = 'North Cape';
+
+-- select ocuntries whose ships never participated in battles
+
+select c.country, s.name
+from classes as c
+ left join ships as s
+on s.class = c.class
+left join outcomes as o
+on o.ship = s.name
+where o.battle is null
+and s.name is not null;
