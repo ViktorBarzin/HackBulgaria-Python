@@ -10,8 +10,8 @@ commands = {'add patient': hospital.add_patient,
             'delete patient': hospital.delete_entity,
             'delete doctor': hospital.delete_entity,
             'delete hospital stay': hospital.delete_entity}
-entities = {'patients': 'patients',
-            'doctors': 'doctors',
+entities = {'patient': 'patients',
+            'doctor': 'doctors',
             'hospital': 'hospital_stay'}
 
 
@@ -19,18 +19,17 @@ command = input('Enter a command:')
 while command != 'quit' and command != 'exit':
     # check if list command
     if 'list' in command:
-        # try:
-        entity = command.split(' ')[1]
-        hospital.list_all(entity.lower())
-        # except Exception as e:
-        #     print('Invalid list command')
-        #     print(e)
+        try:
+            entity = command.split(' ')[1]
+            hospital.list_all(entity.lower())
+        except Exception as e:
+            print(e)
     # check if add command
     if 'add' in command:
         # check entity type
         try:
             entity = entities[command.split(' ')[1]].lower()
-            if entity == 'patients' or entity == 'patient':
+            if entity == 'patients':
                 # add patient
                 hospital.add_patient()
             elif entity == 'doctors' or entity == 'doctor':
@@ -42,6 +41,20 @@ while command != 'quit' and command != 'exit':
         except:
             print('Invalid add command')
 
+    if 'delete' in command:
+        hospital.delete_entity()
+
+    if 'update' in command:
+        # todo: update wihtout the ifs
+        entity = input('Enter what do you want to update:')
+        if entity == 'patient':
+            hospital.update_patient()
+        elif entity == 'doctor':
+            hospital.update_doctor()
+        elif entity == 'hospital stay' or entity == 'hospital_stay':
+            hospital.update_hospital_stay()
+        else:
+            print('ERROR: There is no such object.')
     command = input('Enter another command:')
     print(command)
 

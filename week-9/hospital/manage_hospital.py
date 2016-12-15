@@ -8,8 +8,8 @@ class ManageHospital:
         self.db = sqlite3.connect(self.db_name)
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
-        self.entities = {'patients': 'patients',
-                         'doctors': 'doctors',
+        self.entities = {'patient': 'patients',
+                         'doctor': 'doctors',
                          'hospital': 'hospital_stay'}
 
     def list_all(self, entities):
@@ -110,7 +110,7 @@ class ManageHospital:
         self.db.commit()
 
     def delete_entity(self):
-        self.__delete_entity(self.entities[input('Enter entity to delete:')])
+        self.__delete_entity(self.entities[input('Enter entity to delete:')], input('Enter ID:'))
 
     def __delete_entity(self, entity, entity_id):
         # entity is called from within the program so no need to escape it
