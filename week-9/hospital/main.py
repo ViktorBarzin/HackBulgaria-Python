@@ -15,7 +15,7 @@ def main():
                 entity = command.split(' ')[1]
                 hospital.list_all(entity.lower())
             except Exception as e:
-                print(e)
+                print('Command format is: list <entities>')
         # check if add command
         if 'add' in command:
             # check entity type
@@ -52,4 +52,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
