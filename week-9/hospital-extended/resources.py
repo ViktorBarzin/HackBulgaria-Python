@@ -15,6 +15,8 @@ ENTER_HELP_TO_SEE_HELP_MENU = 'Enter "help" to see help menu'
 ENTER_PASSWORD_MESSAGE = 'Enter your password:'
 CONFIRM_PASSWORD_MESSAGE = 'Confirm your password:'
 ENTER_USERNAME_MESSAGE = 'Enter username:'
+ENTER_AGE_MESSAGE = 'Enter your age:'
+
 
 PASSWORD_MISMATCH_MESSAGE = 'Passwords did not match, you must restart the registration process'
 WELCOME_PATIENT_MESSAGE = 'Hi {0}, \n You are a patient in Hospital Manager.\n You have the abilities to:'

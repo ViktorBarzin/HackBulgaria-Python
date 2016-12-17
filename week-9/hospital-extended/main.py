@@ -4,6 +4,7 @@ import user_interface
 import resources
 import hospital_manager
 
+
 def main():
     # Setup db
     # connection_string = settings.DB_CONNECTION_STRING
@@ -18,4 +19,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # todo: continue from registration
 

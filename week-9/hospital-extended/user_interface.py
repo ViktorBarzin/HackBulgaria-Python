@@ -41,10 +41,11 @@ class UserInterface:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = input(self.r.ENTER_PASSWORD_MESSAGE)
                     conf_password = input(self.r.CONFIRM_PASSWORD_MESSAGE)
+                    age = input(self.r.ENTER_AGE_MESSAGE)
                     if password != conf_password:
                         print(self.r.PASSWORD_MISMATCH_MESSAGE)
                         continue
-                    self.hospital_instance.register(username, password)
+                    self.hospital_instance.register(username, password, age)
             except ValueError:
                 print(self.r.VALUE_ERROR_MESSAGE)
                 print(self.r.ENTER_HELP_TO_SEE_HELP_MENU)
