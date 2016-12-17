@@ -32,8 +32,26 @@ class HospitalManager:
         if self.login(username, password):
             print(self.welcome(username))
 
-    def __register_patient(self, username, password):
-        pass
+    def __register_patient(self, username, password, age):
+        self.__register_user(username, password, age)
+        # Ask to assign doctor
+        all_doctors = self.cursor.execute(common_sql_queries.SELECT_DOCTOR_JOIN_USER).fetchall()
+        id_doct_dict = {}
+        for i in range(1, len(all_doctors)):
+            id_doct_dict[i] = all_doctors[i]
+            print('{0}) {1}'.format(i, all_doctors[i]['username']))
+        try:
+            choice = int(input(self.r.CHOOSE_DOCTOR))
+        except ValueError:
+            print(self.r.VALUE_ERROR_MESSAGE)
+
+        new_user_id = (self.cursor.execute(common_sql_queries.GET_USER_ID_BY_USERNAME, (username,))).fetchone()['id']
+        self.__execute_query(db_population_queries.INSERT_INTO_PATIENT,
+                             (new_user_id, id_doct_dict[choice]['id'] if choice in id_doct_dict else None))
+
+        # Login newly registered patient:
+        if self.login(username, password):
+            print(self.welcome(username))
 
     def __welcome_patient(self, username):
         return self.r.WELCOME_PATIENT_MESSAGE.format(username)

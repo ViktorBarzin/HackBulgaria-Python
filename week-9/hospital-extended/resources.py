@@ -22,3 +22,4 @@ PASSWORD_MISMATCH_MESSAGE = 'Passwords did not match, you must restart the regis
 WELCOME_PATIENT_MESSAGE = 'Hi {0}, \n You are a patient in Hospital Manager.\n You have the abilities to:'
 WELCOME_DOCTOR_MESSAGE = 'Hi, {0},\n You are a {1} in Hospital Manager.\n You have the abilities to:'
 DR_TITLE = 'Dr.'
+CHOOSE_DOCTOR = '''Please choose a doctor to be assigned to you or select 0 if you will assign one later:'''
