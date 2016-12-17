@@ -2,8 +2,9 @@ from getpass import getpass
 
 
 class UserInterface:
-    def __init__(self, resource_file, hospital_instance):
+    def __init__(self, resource_file, hospital_instance, settings_file):
         self.r = resource_file
+        self.settings = settings_file
         self.hospital_instance = hospital_instance
         self.__start_ui()
 
@@ -27,16 +28,24 @@ class UserInterface:
                     self.__print_main_menu()
                     comm = input(self.r.CHOOSE_OPTION_STRING)
                     continue
-                comm = int(comm)
-                # print(self.r.MAIN_MENU_OPTIONS_DICT[comm])
+                try:
+                    comm = self.settings.MAIN_MENU_OPTIONS[int(comm)]
+                except ValueError:
+                    print(self.r.VALUE_ERROR_MESSAGE)
+                    continue
+                except KeyError:
+                    print(self.r.INVALID_OPTION_MESSAGE)
+                    continue
 
                 # todo: make 1 check only
-                if comm == 1:
+                if comm == self.settings.MAIN_MENU_OPTIONS[1]:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = input(self.r.ENTER_PASSWORD_MESSAGE)
                     if self.hospital_instance.login(username, password):
                         print(self.hospital_instance.welcome(username))
-                elif comm == 2:
+                    else:
+                        print(self.r.LOGIN_FAILED_MESSAGE)
+                elif comm == self.settings.MAIN_MENU_OPTIONS[2]:
                     # todo: uniqueness of usernames?
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = input(self.r.ENTER_PASSWORD_MESSAGE)
@@ -46,13 +55,19 @@ class UserInterface:
                         print(self.r.PASSWORD_MISMATCH_MESSAGE)
                         continue
                     self.hospital_instance.register(username, password, age)
+                elif comm == self.settings.MAIN_MENU_OPTIONS[3]:
+                    print(self.__print_main_menu())
+                elif comm == self.settings.MAIN_MENU_OPTIONS[4]:
+                    break
+
             except ValueError:
                 print(self.r.VALUE_ERROR_MESSAGE)
                 print(self.r.ENTER_HELP_TO_SEE_HELP_MENU)
             except KeyError:
                 print(self.r.VALUE_ERROR_MESSAGE)
+            finally:
 
-            comm = input(self.r.CHOOSE_OPTION_STRING)
+                comm = input(self.r.CHOOSE_OPTION_STRING)
 
 
 

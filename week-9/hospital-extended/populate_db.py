@@ -32,7 +32,6 @@ def promote_to_doctors():
     for user in users:
         if 'Dr.' in user['username']:
             academic_title = choice(ACADEMIC_TITLES)
-            print(user['id'])
             doctors.append((user['id'], academic_title))
 
     c.executemany(PROMOTE_TO_DOCTOR, doctors)

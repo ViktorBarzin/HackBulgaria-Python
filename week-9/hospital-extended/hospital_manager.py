@@ -1,6 +1,8 @@
 import sqlite3
 import common_sql_queries  # introducing a dependency; consider moving in constructor?
 import db_population_queries
+import hashlib
+import uuid
 
 
 class HospitalManager:
@@ -15,6 +17,11 @@ class HospitalManager:
         result = self.cursor.execute(query, params)
         self.db.commit()
         return result
+
+    @staticmethod
+    def __hash_password(password):
+        salt = uuid.uuid4().hex
+        return hashlib.sha512((password + salt).encode()).hexdigest()
 
     def __register_user(self, username, password, age):
         self.__execute_query(db_population_queries.INSERT_INTO_USER, (username, password, age))
@@ -68,7 +75,7 @@ class HospitalManager:
     def login(self, username, password):
         result = self.__execute_query(common_sql_queries.VALIDATE_USER, (username,))
         user = result.fetchone()
-        if user['password'] == password:
+        if user is not None and user['password'] == self.__hash_password(password):
             self.__execute_query(common_sql_queries.LOGIN_USER, (username,))
             return True
         return False
@@ -79,6 +86,7 @@ class HospitalManager:
         return self.__welcome_patient(username)
 
     def register(self, username, password, age):
+        password = self.__hash_password(password)
         if self.r.DR_TITLE in username:
             return self.__register_doctor(username, password, age)
         return self.__register_patient(username, password, age)

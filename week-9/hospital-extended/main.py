@@ -14,10 +14,9 @@ def main():
 
     hospital = hospital_manager.HospitalManager(settings.DB_CONNECTION_STRING, resources)
     # Start user interface
-    ui = user_interface.UserInterface(resources, hospital)
+    ui = user_interface.UserInterface(resources, hospital, settings)
     ui.start_interaction()
 
 if __name__ == '__main__':
     main()
-    # todo: continue from registration
 
