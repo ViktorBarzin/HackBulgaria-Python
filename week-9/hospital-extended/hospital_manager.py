@@ -127,3 +127,6 @@ class HospitalManager:
         doctor_id = self.__get_user_id_by_username(username)
         print(doctor_id, title)
         self.__execute_query(common_sql_queries.CHANGE_ACADEMIC_TITLE_BY_ID, (title, doctor_id))
+
+    def free_hours_of_patient_doctor(self, patient_username):
+        return [x['STARTHOUR'] for x in self.__execute_query(common_sql_queries.GET_DOCTOR_FREE_HOURS, (patient_username,)).fetchall()]

@@ -137,10 +137,35 @@ class UserInterface:
         # Log out
         elif choice == 7:
             self.hospital_instance.logout(doctor_username)
-            return self.r.SUCCESSFUL1LY_LOGGED_OUT, self.settings.LOGOUT_KEY
+            return self.r.SUCCESSFULLY_LOGGED_OUT, self.settings.LOGOUT_KEY
 
-    def __act_upon_patient_choice(self,choice, patient_username):
-        print('WORKS!')
+    def __act_upon_patient_choice(self, choice, patient_username):
+        # See free hours of your doctor
+        if choice == 1:
+            return 'Your doctor\'s free hours are:\n ' + \
+                   ', '.join(self.hospital_instance.free_hours_of_patient_doctor(patient_username)),
+        # Reserve hour for visitation
+        if choice == 2:
+            pass
+        # Stay at the hospital
+        if choice == 3:
+            pass
+        # See your doctor's academic title
+        if choice == 4:
+            pass
+        # List your hospital stays
+        if choice == 5:
+            pass
+        # Change your doctor
+        if choice == 6:
+            pass
+        # Change username and/or age
+        if choice == 7:
+            pass
+        # Logout
+        if choice == 8:
+            self.hospital_instance.logout(patient_username)
+            return self.r.SUCCESSFULLY_LOGGED_OUT, self.settings.LOGOUT_KEY
 
     def __logged_in_patient_interaction(self, username):
         for number, option in self.settings.LOGGED_IN_PATIENT_OPTIONS.items():
