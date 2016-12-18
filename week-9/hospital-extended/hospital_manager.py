@@ -45,11 +45,13 @@ class HospitalManager:
         self.__register_user(username, password, age)
         # Ask to assign doctor
         all_doctors = self.cursor.execute(common_sql_queries.SELECT_DOCTOR_JOIN_USER).fetchall()
+        print(all_doctors)
         id_doct_dict = {}
         print(self.r.CHOOSE_DOCTOR)
-        for i in range(1, len(all_doctors)):
+        # indexing is changed to format output
+        for i in range(len(all_doctors)):
             id_doct_dict[i] = all_doctors[i]
-            print('{0}) {1}'.format(i, all_doctors[i]['username']))
+            print('{0}) {1}'.format(i + 1, all_doctors[i]['username']))
         try:
             choice = int(input())
         except ValueError:
@@ -57,11 +59,11 @@ class HospitalManager:
 
         new_user_id = (self.cursor.execute(common_sql_queries.GET_USER_ID_BY_USERNAME, (username,))).fetchone()['id']
         self.__execute_query(db_population_queries.INSERT_INTO_PATIENT,
-                             (new_user_id, id_doct_dict[choice]['id'] if choice in id_doct_dict else None))
+                             (new_user_id, id_doct_dict[choice - 1]['id'] if choice - 1 in id_doct_dict else None))
 
         # Login newly registered patient:
-        if self.login(username, password):
-            print(self.welcome(username))
+        self.login(username, password)
+            # print(self.welcome(username))
 
     def __welcome_patient(self, username):
         return self.r.WELCOME_PATIENT_MESSAGE.format(username)
@@ -72,9 +74,8 @@ class HospitalManager:
                      .fetchone()['academic_title'])
 
     def __get_user_id_by_username(self, username):
-        return self.__execute_query(common_sql_queries.GET_USER_ID_BY_USERNAME(), (username,))
+        return self.__execute_query(common_sql_queries.GET_USER_ID_BY_USERNAME, (username,)).fetchone()['id']
 
-    # todo: hash passwords to beef up security
     def login(self, username, password):
         result = self.__execute_query(common_sql_queries.VALIDATE_USER, (username,))
         user = result.fetchone()
@@ -92,3 +93,38 @@ class HospitalManager:
         if self.r.DR_TITLE in username:
             return self.__register_doctor(username, password, age)
         return self.__register_patient(username, password, age)
+
+    # Logged in section methods (perhaps move in another class?)
+    def list_patients(self, username):
+        doctor = self.__execute_query(common_sql_queries.GET_DOCTOR_ID_BY_USERNAME, (username,)).fetchone()
+
+        # Gets patient username for all patients whose doctor id matches the given one
+        return [x['USERNAME'] for x in
+                self.__execute_query(common_sql_queries.LIST_PATIENTS_OF_DOCTOR, (doctor['id'],)).fetchall()]
+
+    def logout(self, username):
+        user_id = self.__get_user_id_by_username(username)
+        return self.__execute_query(common_sql_queries.LOGOUT_USER_BY_ID, (user_id,))
+
+    def add_visitation_hour(self, doctor_username, starthour):
+        doctor_id = self.__get_user_id_by_username(doctor_username)
+        return self.__execute_query(db_population_queries.INSERT_INTO_VISITATION, (doctor_id, starthour))
+
+    def delete_free_visitation_hours(self):
+        return self.__execute_query(common_sql_queries.DELETE_FREE_VISITATION_HOURS, ())
+
+    def get_room_and_username_duration_start_and_end_for_all_patients(self):
+        result = self.__execute_query(common_sql_queries.GET_ROOM_AND_USERNAME_DURATION_START_AND_END_FOR_ALL_PATIENTS, ())\
+            .fetchall()
+        return result
+
+    def change_username(self, old_username, new_username):
+        self.__execute_query(common_sql_queries.CHANGE_USERNAME_BY_USERNAME, (new_username, old_username))
+
+    def change_age(self, username, age):
+        self.__execute_query(common_sql_queries.CHANGE_AGE_BY_USERNAME, (int(age), username))
+
+    def change_academic_title(self, username, title):
+        doctor_id = self.__get_user_id_by_username(username)
+        print(doctor_id, title)
+        self.__execute_query(common_sql_queries.CHANGE_ACADEMIC_TITLE_BY_ID, (title, doctor_id))
