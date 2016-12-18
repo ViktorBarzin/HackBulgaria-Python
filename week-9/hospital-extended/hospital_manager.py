@@ -19,9 +19,10 @@ class HospitalManager:
 
     @staticmethod
     def __hash_password(password):
-        return pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
+        return pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=128)
 
-    def __verify_password(self, password, h):
+    @staticmethod
+    def __verify_password(password, h):
         return pbkdf2_sha256.verify(password, h)
 
     def __register_user(self, username, password, age):

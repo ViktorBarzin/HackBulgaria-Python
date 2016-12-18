@@ -68,7 +68,3 @@ class UserInterface:
             finally:
 
                 comm = input(self.r.CHOOSE_OPTION_STRING)
-
-
-
-
