@@ -45,7 +45,6 @@ class HospitalManager:
         self.__register_user(username, password, age)
         # Ask to assign doctor
         all_doctors = self.cursor.execute(common_sql_queries.SELECT_DOCTOR_JOIN_USER).fetchall()
-        print(all_doctors)
         id_doct_dict = {}
         print(self.r.CHOOSE_DOCTOR)
         # indexing is changed to format output
@@ -62,8 +61,8 @@ class HospitalManager:
                              (new_user_id, id_doct_dict[choice - 1]['id'] if choice - 1 in id_doct_dict else None))
 
         # Login newly registered patient:
-        self.login(username, password)
-            # print(self.welcome(username))
+        if self.login(username, password):
+            print(self.welcome(username))
 
     def __welcome_patient(self, username):
         return self.r.WELCOME_PATIENT_MESSAGE.format(username)

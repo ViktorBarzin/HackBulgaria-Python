@@ -22,19 +22,31 @@ class UserInterface:
             # Print main menu options
             print(str(k) + self.r.MAIN_MENU_OPTIONS_SEPARATOR + ' ' + v)
 
-    def __logged_in_interaction(self, username):
-        print(self.hospital_instance.welcome(username))
-        self.logging_out = False
-        if self.r.DR_TITLE in username:
-            return self.__logged_in_doctor_interaction(username)
-        return self.__logged_in_patient_interaction(username)
+    # def __logged_in_interaction(self, username):
+    #     print(self.hospital_instance.welcome(username))
+    #     self.logging_out = False
+    #     if self.r.DR_TITLE in username:
+    #         return self.__logged_in_doctor_interaction(username)
+    #     return self.__logged_in_patient_interaction(username)
+
+    def __is_doctor(self, username):
+        return self.r.DR_TITLE in username
 
     def __print_doctor_options(self):
         for number, option in self.settings.LOGGED_IN_DOCTOR_OPTIONS.items():
             print('{0}) {1}'.format(number, option))
 
-    def __logged_in_doctor_interaction(self, username):
-        self.__print_doctor_options()
+    def __print_user_options(self):
+        for number, option in self.settings.LOGGED_IN_PATIENT_OPTIONS.items():
+            print('{0}) {1}'.format(number, option))
+
+    def __logged_in_interaction(self, username):
+        is_doctor = self.__is_doctor(username)
+
+        if is_doctor:
+            self.__print_doctor_options()
+        else:
+            self.__print_user_options()
         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
 
         # todo: coupling too much to the options menu :/, find a fix
@@ -44,7 +56,10 @@ class UserInterface:
                 if comm.lower() == 'help':
                     self.__print_doctor_options()
                     continue
-                result = self.__act_upon_doctor_choice(int(comm), username)
+                if is_doctor:
+                    result = self.__act_upon_doctor_choice(int(comm), username)
+                else:
+                    result = self.__act_upon_patient_choice(int(comm), username)
                 print(result[0])
                 if len(result) > 1 and result[1] == self.settings.LOGOUT_KEY:
                     self.logging_out = True
@@ -124,6 +139,8 @@ class UserInterface:
             self.hospital_instance.logout(doctor_username)
             return self.r.SUCCESSFUL1LY_LOGGED_OUT, self.settings.LOGOUT_KEY
 
+    def __act_upon_patient_choice(self,choice, patient_username):
+        print('WORKS!')
 
     def __logged_in_patient_interaction(self, username):
         for number, option in self.settings.LOGGED_IN_PATIENT_OPTIONS.items():
