@@ -1,8 +1,7 @@
 import sqlite3
 import common_sql_queries  # introducing a dependency; consider moving in constructor?
 import db_population_queries
-import hashlib
-import uuid
+from passlib.hash import pbkdf2_sha256
 
 
 class HospitalManager:
@@ -20,11 +19,13 @@ class HospitalManager:
 
     @staticmethod
     def __hash_password(password):
-        salt = uuid.uuid4().hex
-        return hashlib.sha512((password + salt).encode()).hexdigest()
+        return pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
+
+    def __verify_password(self, password, h):
+        return pbkdf2_sha256.verify(password, h)
 
     def __register_user(self, username, password, age):
-        self.__execute_query(db_population_queries.INSERT_INTO_USER, (username, password, age))
+        self.__execute_query(db_population_queries.INSERT_INTO_USER, (username, self.__hash_password(password), age))
 
     def __register_doctor(self, username, password, age):
         # todo: move asking for user input in higher level?
@@ -44,11 +45,12 @@ class HospitalManager:
         # Ask to assign doctor
         all_doctors = self.cursor.execute(common_sql_queries.SELECT_DOCTOR_JOIN_USER).fetchall()
         id_doct_dict = {}
+        print(self.r.CHOOSE_DOCTOR)
         for i in range(1, len(all_doctors)):
             id_doct_dict[i] = all_doctors[i]
             print('{0}) {1}'.format(i, all_doctors[i]['username']))
         try:
-            choice = int(input(self.r.CHOOSE_DOCTOR))
+            choice = int(input())
         except ValueError:
             print(self.r.VALUE_ERROR_MESSAGE)
 
@@ -75,7 +77,7 @@ class HospitalManager:
     def login(self, username, password):
         result = self.__execute_query(common_sql_queries.VALIDATE_USER, (username,))
         user = result.fetchone()
-        if user is not None and user['password'] == self.__hash_password(password):
+        if user is not None and self.__verify_password(password, user['password']):
             self.__execute_query(common_sql_queries.LOGIN_USER, (username,))
             return True
         return False
@@ -86,7 +88,6 @@ class HospitalManager:
         return self.__welcome_patient(username)
 
     def register(self, username, password, age):
-        password = self.__hash_password(password)
         if self.r.DR_TITLE in username:
             return self.__register_doctor(username, password, age)
         return self.__register_patient(username, password, age)
