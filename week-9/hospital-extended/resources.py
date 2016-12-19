@@ -61,3 +61,6 @@ CHOOSE_ROOM = 'Enter your room number:'
 CHOOSE_INJURY = 'Enter your injury:'
 
 CHOOSE_DOCTOR = 'Choose a doctor from the list below:'
+
+NEW_PASSWORD_PROMPT = 'Your password must contain 1 upper case, 1 lower case, a digit and be greater then 7 symbols.'
+REGISTRATION_FAILED_MESSAGE = 'The registration process failed.'

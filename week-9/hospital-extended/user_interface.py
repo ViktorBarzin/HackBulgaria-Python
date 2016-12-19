@@ -1,3 +1,4 @@
+import re
 from getpass import getpass
 
 
@@ -44,6 +45,19 @@ class UserInterface:
             except ValueError:
                 print(self.r.VALUE_ERROR_MESSAGE)
         return formatted_message
+
+    def __is_valid_password(self, password):
+        invalid_attempts = 0
+        is_valid = False
+        while not is_valid and invalid_attempts < self.settings.MAX_FAILED_PASSWORD_ATTEMPTS:
+            if re.match('.*[0-9].*', password) and\
+               re.match('.*[A-Z].*', password) and\
+               re.match('.*[a-z].*', password):
+                return True
+            invalid_attempts += 1
+            password = input(self.r.NEW_PASSWORD_PROMPT + '({0} attempts remaining)'.
+                             format(self.settings.MAX_FAILED_PASSWORD_ATTEMPTS - invalid_attempts + 1))
+        return False
 
     # Prints main menu options
     def __print_main_menu(self):
@@ -246,11 +260,17 @@ class UserInterface:
                     # todo: usernames MUST be unique
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
-                    conf_password = input(self.r.CONFIRM_PASSWORD_MESSAGE)
-                    age = input(self.r.ENTER_AGE_MESSAGE)
+
+                    # Validate password against password constraints
+                    if not self.__is_valid_password(password):
+                        print(self.r.REGISTRATION_FAILED_MESSAGE)
+                        continue
+                    conf_password = getpass(self.r.CONFIRM_PASSWORD_MESSAGE)
+
                     if password != conf_password:
                         print(self.r.PASSWORD_MISMATCH_MESSAGE)
                         continue
+                    age = input(self.r.ENTER_AGE_MESSAGE)
                     self.hospital_instance.register(username, password, age)
                     # todo: add some sort of verification that registration was successful?
                     return self.__logged_in_interaction(username)

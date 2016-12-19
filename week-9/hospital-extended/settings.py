@@ -19,3 +19,5 @@ LOGGED_IN_DOCTOR_OPTIONS = {1: 'List your patients', 2: 'Add hour for visitation
                             5: 'Change username and/or age', 6: 'Raise in the hierarchy',
                             7: 'Logout'}
 LOGOUT_KEY = '__logout'
+# The below constant is used in registration
+MAX_FAILED_PASSWORD_ATTEMPTS = 3
