@@ -130,3 +130,28 @@ class HospitalManager:
 
     def free_hours_of_patient_doctor(self, patient_username):
         return [x['STARTHOUR'] for x in self.__execute_query(common_sql_queries.GET_DOCTOR_FREE_HOURS, (patient_username,)).fetchall()]
+
+    def update_visitation(self, doctor_id, patient_id, start_hour):
+        return self.__execute_query(common_sql_queries.UPDATE_VISITATION_TABLE, (int(patient_id), int(doctor_id), start_hour))
+
+    def get_doctor_of(self, username):
+        return self.__execute_query(common_sql_queries.GET_DOCTOR_OF_PATIENT, (username,)).fetchone()
+
+    def get_id_by_username(self, username):
+        # Assuming usernames are unique
+        return self.__execute_query(common_sql_queries.GET_USER_ID_BY_USERNAME, (username,)).fetchone()['ID']
+
+    def insert_in_hospital_stay(self, startdate, room, injury, patient_id, enddate=None):
+        return self.__execute_query(db_population_queries.INSERT_INTO_HOSPITAL_STAY, (startdate, enddate,
+                                                                                      room, injury, patient_id))
+
+    def get_all_hospital_stays_of(self, username):
+        patient_id = self.get_id_by_username(username)
+        return self.__execute_query(common_sql_queries.GET_ALL_HOSPITAL_STAYS_OF_, (patient_id,)).fetchall()
+
+    def get_all_doctors(self):
+        return self.__execute_query(common_sql_queries.SELECT_DOCTOR_JOIN_USER, ()).fetchall()
+
+    def change_doctor_of(self, patient_username, new_doctor_id):
+        patient_id = self.get_id_by_username(patient_username)
+        return self.__execute_query(common_sql_queries.UPDATE_DOCTOR_OF, (new_doctor_id, patient_id))

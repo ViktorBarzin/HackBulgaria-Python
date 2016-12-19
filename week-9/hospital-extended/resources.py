@@ -11,6 +11,7 @@ EXIT = 'exit'  # todo: try to move in a dict
 # Error messages
 VALUE_ERROR_MESSAGE = 'Entered value is invalid!'
 INVALID_OPTION_MESSAGE = 'Invalid option!'
+INDEX_ERROR_MESSAGE = 'Chose a valid number!'
 
 ENTER_HELP_TO_SEE_HELP_MENU = 'Enter "help" to see help menu'
 ENTER_PASSWORD_MESSAGE = 'Enter your password:'
@@ -32,6 +33,9 @@ ENTER_VISITATION_START_HOUR = 'Enter visitation start hour:'
 SUCCESSFULLY_ADDED_VISITATION = 'Visitation was successfully added!'
 SUCCESSFULLY_LOGGED_OUT = 'You have succesfully logged out!'
 SUCCESSFULLY_DELETED_FREE_VISITATION_HOURS_MESSAGE = 'You have successfully deleted the free visitation hours!'
+SUCCESSFULLY_CHOSE_VISITATION = 'You have successfully chosen a hour for visitation!'
+SUCCESSFULLY_ADDED_TO_HOSPITAL_STAY_LIST = 'You have successfully registered in the hospital stay list!'
+SUCCESSFULLY_CHANGED_DOCTOR = 'You have successfully changed your doctor!'
 
 ONGOING_MESSAGE = 'ongoing'
 
@@ -48,3 +52,12 @@ SUCCESSFULLY_CHANGED_AGE = 'You have successfully changed your age to: '
 
 NEW_ACADEMIC_TITLE_PROMPT = 'Enter your new academic title:'
 SUCCESSFULLY_CHANGED_ACADEMIC_TITLE = 'You have successfully updated your academic title to: '
+
+CHOOSE_FREE_HOUR = 'Choose a hour for visitation:'
+
+CHOOSE_HOSPITAL_STAY_START_DATE = 'Enter the start date of your hospital stay:'
+CHOOSE_HOSPITAL_STAY_END_DATE = 'Enter the end of your visitation if known:'
+CHOOSE_ROOM = 'Enter your room number:'
+CHOOSE_INJURY = 'Enter your injury:'
+
+CHOOSE_DOCTOR = 'Choose a doctor from the list below:'

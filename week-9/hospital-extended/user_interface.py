@@ -16,18 +16,38 @@ class UserInterface:
     def __start_ui(self):
         return self.r.LOAD_UP
 
+    def __change_username(self, current_username):
+        formatted_message = ''
+        uname_changed = False
+        # Change username
+        change_username = str(input(self.r.CHANGE_USERNAME_PROMPT))
+        if change_username.lower() == self.r.YES_OPTION:
+            # todo: this will be problematic when setting usernames unique
+            new_username = str(input(self.r.NEW_USERNAME_PROMPT))
+            self.hospital_instance.change_username(current_username, new_username)
+            formatted_message += self.r.SUCCESSFULLY_CHANGED_USERNAME + new_username + '\n'
+            uname_changed = True
+        # Change age
+        change_age = str(input(self.r.CHANGE_AGE_PROMPT))
+        if change_age.lower() == self.r.YES_OPTION:
+            try:
+                new_age = input(self.r.NEW_AGE_PROMPT)
+                new_age = int(new_age)
+                # Check if username is changed in previous prompt and change age accordingly
+                if not uname_changed:
+                    self.hospital_instance.change_age(doctor_username, new_age)
+                else:
+                    self.hospital_instance.change_age(new_username, new_age)
+                formatted_message += self.r.SUCCESSFULLY_CHANGED_AGE + str(new_age) + '\n'
+            except ValueError:
+                print(self.r.VALUE_ERROR_MESSAGE)
+        return formatted_message
+
     # Prints main menu options
     def __print_main_menu(self):
         for k, v in self.r.MAIN_MENU_OPTIONS_DICT.items():
             # Print main menu options
             print(str(k) + self.r.MAIN_MENU_OPTIONS_SEPARATOR + ' ' + v)
-
-    # def __logged_in_interaction(self, username):
-    #     print(self.hospital_instance.welcome(username))
-    #     self.logging_out = False
-    #     if self.r.DR_TITLE in username:
-    #         return self.__logged_in_doctor_interaction(username)
-    #     return self.__logged_in_patient_interaction(username)
 
     def __is_doctor(self, username):
         return self.r.DR_TITLE in username
@@ -36,17 +56,18 @@ class UserInterface:
         for number, option in self.settings.LOGGED_IN_DOCTOR_OPTIONS.items():
             print('{0}) {1}'.format(number, option))
 
-    def __print_user_options(self):
+    def __print_patient_options(self):
         for number, option in self.settings.LOGGED_IN_PATIENT_OPTIONS.items():
             print('{0}) {1}'.format(number, option))
 
+    # Logged in user interaction
     def __logged_in_interaction(self, username):
         is_doctor = self.__is_doctor(username)
-
+        print(self.hospital_instance.welcome(username))
         if is_doctor:
             self.__print_doctor_options()
         else:
-            self.__print_user_options()
+            self.__print_patient_options()
         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
 
         # todo: coupling too much to the options menu :/, find a fix
@@ -54,14 +75,18 @@ class UserInterface:
         while comm != self.r.EXIT:
             try:
                 if comm.lower() == 'help':
-                    self.__print_doctor_options()
+                    if is_doctor:
+                        self.__print_doctor_options()
+                    else:
+                        self.__print_patient_options()
                     continue
                 if is_doctor:
                     result = self.__act_upon_doctor_choice(int(comm), username)
                 else:
                     result = self.__act_upon_patient_choice(int(comm), username)
-                print(result[0])
-                if len(result) > 1 and result[1] == self.settings.LOGOUT_KEY:
+                is_result_none = result is None
+                print(result[0] if not is_result_none else '')
+                if not is_result_none and len(result) > 1 and result[1] == self.settings.LOGOUT_KEY:
                     self.logging_out = True
                     break
 
@@ -104,31 +129,7 @@ class UserInterface:
             return formatted_message,
         # Change username and/or age
         elif choice == 5:
-            formatted_message = ''
-            uname_changed = False
-            # Change username
-            change_username = str(input(self.r.CHANGE_USERNAME_PROMPT))
-            if change_username.lower() == self.r.YES_OPTION:
-                # todo: this will be problematic when setting usernames unique
-                new_username = str(input(self.r.NEW_USERNAME_PROMPT))
-                self.hospital_instance.change_username(doctor_username, new_username)
-                formatted_message += self.r.SUCCESSFULLY_CHANGED_USERNAME + new_username + '\n'
-                uname_changed = True
-            # Change age
-            change_age = str(input(self.r.CHANGE_AGE_PROMPT))
-            if change_age.lower() == self.r.YES_OPTION:
-                try:
-                    new_age = input(self.r.NEW_AGE_PROMPT)
-                    new_age = int(new_age)
-                    # Check if username is changed in previous prompt and change age accordingly
-                    if not uname_changed:
-                        self.hospital_instance.change_age(doctor_username, new_age)
-                    else:
-                        self.hospital_instance.change_age(new_username, new_age)
-                    formatted_message += self.r.SUCCESSFULLY_CHANGED_AGE + str(new_age) + '\n'
-                except ValueError:
-                    print(self.r.VALUE_ERROR_MESSAGE)
-            return formatted_message,
+            return self.__change_username(doctor_username),
         # Raise into the hierarchy:
         elif choice == 6:
             new_title = input(self.r.NEW_ACADEMIC_TITLE_PROMPT)
@@ -145,31 +146,76 @@ class UserInterface:
             return 'Your doctor\'s free hours are:\n ' + \
                    ', '.join(self.hospital_instance.free_hours_of_patient_doctor(patient_username)),
         # Reserve hour for visitation
-        if choice == 2:
-            pass
+        elif choice == 2:
+            free_hours = self.hospital_instance.free_hours_of_patient_doctor(patient_username)
+
+            # Print choices
+            for i in range(len(free_hours)):
+                print('{0}) {1}\n'.format(i + 1, free_hours[i]))
+            try:
+                chosen_hour = free_hours[int(input(self.r.CHOOSE_FREE_HOUR)) - 1]
+            except ValueError:
+                return self.r.VALUE_ERROR_MESSAGE,
+            except IndexError:
+                return self.r.INDEX_ERROR_MESSAGE,
+
+        # todo: visitation table's PK is id only, which may lead to inconsistent results
+            doctor_id = self.hospital_instance.get_doctor_of(patient_username)['DOCTOR_ID']
+            print(doctor_id, patient_username)
+            self.hospital_instance.update_visitation(doctor_id,
+                                                     self.hospital_instance.get_id_by_username(patient_username),
+                                                     chosen_hour)
+            return self.r.SUCCESSFULLY_CHOSE_VISITATION,
+
         # Stay at the hospital
-        if choice == 3:
-            pass
+        elif choice == 3:
+            # In future make user chose from a set of options
+            startdate = input(self.r.CHOOSE_HOSPITAL_STAY_START_DATE)
+            enddate = input(self.r.CHOOSE_HOSPITAL_STAY_END_DATE)
+            # Room number may consist of letters
+            room = input(self.r.CHOOSE_ROOM)
+            injury = input(self.r.CHOOSE_INJURY)
+            patient_id = self.hospital_instance.get_id_by_username(patient_username)
+            self.hospital_instance.insert_in_hospital_stay(startdate, room, injury, patient_id, enddate)
+            return self.r.SUCCESSFULLY_ADDED_TO_HOSPITAL_STAY_LIST,
         # See your doctor's academic title
-        if choice == 4:
-            pass
+        elif choice == 4:
+            doctor = self.hospital_instance.get_doctor_of(patient_username)
+            return 'Your doctor {0} is {1}'.format(doctor['DOCTOR_USERNAME'], doctor['DOCTOR_ACADEMIC_TITLE']),
         # List your hospital stays
-        if choice == 5:
-            pass
+        elif choice == 5:
+            stays = self.hospital_instance.get_all_hospital_stays_of(patient_username)
+            # Formatting output
+            return '\n'.join(['{start} - {end}, {room}, {injury}'.
+                             format(start=x['startdate'], room=x['room'], injury=x['injury'],
+                                    end=x['enddate'] if x['enddate'] is not '' else self.r.ONGOING_MESSAGE)
+                              for x in stays]),
+
         # Change your doctor
-        if choice == 6:
-            pass
+        elif choice == 6:
+            all_doctors = self.hospital_instance.get_all_doctors()
+            # Perhaps not list the current patients doctor?
+            print(self.r.CHOOSE_DOCTOR)
+            # Formatting output
+            for i in range(len(all_doctors)):
+                print('{0}) {1}; Academic Title: {2}, Age: {3}'.format(i + 1, all_doctors[i]['USERNAME'],
+                                                                       all_doctors[i]['ACADEMIC_TITLE'],
+                                                                       all_doctors[i]['AGE']))
+            try:
+                doctor_choice = all_doctors[int(input()) - 1]
+            except ValueError:
+                return self.r.VALUE_ERROR_MESSAGE,
+            except IndexError:
+                return self.r.INDEX_ERROR_MESSAGE,
+            self.hospital_instance.change_doctor_of(patient_username, doctor_choice['ID'])
+            return self.r.SUCCESSFULLY_CHANGED_DOCTOR,
         # Change username and/or age
-        if choice == 7:
-            pass
+        elif choice == 7:
+            return self.__change_username(patient_username),
         # Logout
-        if choice == 8:
+        elif choice == 8:
             self.hospital_instance.logout(patient_username)
             return self.r.SUCCESSFULLY_LOGGED_OUT, self.settings.LOGOUT_KEY
-
-    def __logged_in_patient_interaction(self, username):
-        for number, option in self.settings.LOGGED_IN_PATIENT_OPTIONS.items():
-            print('{0}) {1}'.format(number, option))
 
     # main user interaction is done here
     def start_interaction(self):
