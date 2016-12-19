@@ -27,6 +27,8 @@ class UserInterface:
             self.hospital_instance.change_username(current_username, new_username)
             formatted_message += self.r.SUCCESSFULLY_CHANGED_USERNAME + new_username + '\n'
             uname_changed = True
+            global username
+            username = new_username
         # Change age
         change_age = str(input(self.r.CHANGE_AGE_PROMPT))
         if change_age.lower() == self.r.YES_OPTION:
@@ -232,7 +234,7 @@ class UserInterface:
                 # Login option
                 if comm == self.settings.MAIN_MENU_OPTIONS[1]:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
-                    password = input(self.r.ENTER_PASSWORD_MESSAGE)
+                    password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     if self.hospital_instance.login(username, password):
                         # Start logged in user interaction
                         self.__logged_in_interaction(username)
@@ -243,7 +245,7 @@ class UserInterface:
                 elif comm == self.settings.MAIN_MENU_OPTIONS[2]:
                     # todo: usernames MUST be unique
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
-                    password = input(self.r.ENTER_PASSWORD_MESSAGE)
+                    password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     conf_password = input(self.r.CONFIRM_PASSWORD_MESSAGE)
                     age = input(self.r.ENTER_AGE_MESSAGE)
                     if password != conf_password:
