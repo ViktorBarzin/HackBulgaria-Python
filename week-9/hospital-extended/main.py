@@ -16,6 +16,6 @@ def main():
     # Start user interface
     ui = user_interface.UserInterface(resources, hospital, settings)
     ui.start_interaction()
-
+    
 if __name__ == '__main__':
     main()
