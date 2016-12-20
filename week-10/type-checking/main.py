@@ -27,29 +27,32 @@ def main():
     composition = inpt[-1]
 
     functions = [x.replace('\n', '') for x in inpt[:-2:] if x != '']
-    # print(functions)
-    # print(functions)
-    parsed_functions = []
-    function_names = []
-    for f in functions:
-        new_func = Function(f)
-        parsed_functions.append(new_func)
-        function_names.append(new_func.name)
-
-    # print(parsed_functions)
-
-    method_calls = composition.replace('.', '').split()
+    method_calls = composition.replace('.','').split()
     # print(method_calls)
+    # print(functions)
+    functions_sorted_by_call =[]
 
-    for i in range(len(method_calls) - 1):
-        if not parsed_functions[function_names.index(method_calls[i])].composition(parsed_functions[function_names.index(method_calls[i + 1])]):
-            # print('this is not a valid composition')
+    # put functions in call order
+    for call in method_calls:
+        functions_sorted_by_call.append([x for x in functions if call in x][0])
 
+    function_parameter_output = [x.replace('::', ' ').replace('->', ' ').split()[1::] for x in functions_sorted_by_call]
+    # print(function_parameter_output)
+    final_parameter_output_list = []
+
+    for param in function_parameter_output:
+        final_parameter_output_list.extend(list(reversed(param)))
+    final_parameter_output_list = final_parameter_output_list[1:-1:]
+
+    #:print(final_parameter_output_list)
+    # check if valid ocmposition:
+    for i in range(0, len(final_parameter_output_list), 2):
+        #print(final_parameter_output_list[i]==final_parameter_output_list[i+1])
+        if not final_parameter_output_list[i]==final_parameter_output_list[i+1]:
             print('False')
             return
-
+    # print(final_parameter_output_list)
     print('True')
-    # print("everything's OK and this is a valid composition.")
-
 if __name__ == '__main__':
     main()
+

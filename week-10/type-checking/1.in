@@ -1,5 +1,4 @@
-length :: [a] -> Int
 fact :: Int -> Int
 isPrime :: Int -> Bool
 
-isPrime . fact . length
+isPrime . fact 
