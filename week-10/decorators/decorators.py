@@ -6,7 +6,8 @@ def accepts(*args):
         def check_type(*func_args, **func_kwargs):
             for i in range(len(args)):
                 if type(func_args[i]).__name__ != args[i].__name__:
-                    raise TypeError
+                    raise TypeErro?!?jedi=1, r('Argument {0} o?!? (*args, **kwargs) ?!?jedi?!?'f {1} is not {2}'
+                            .format(i, func.__name__, args[i].__name__))
             return func(*func_args, **func_kwargs)
         return check_type
     return accepter
