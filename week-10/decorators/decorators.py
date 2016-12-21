@@ -53,16 +53,3 @@ def performance(file_name):
         return performance_logging
     return get_func
 
-
-
-
-
-
-
-
-
-
-
-
-
-
