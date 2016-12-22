@@ -7,3 +7,5 @@ class ViewModel:
 
     def login(self, username, password):
         return self.db_model.login(username,  password)
+
+    #def register(self, )

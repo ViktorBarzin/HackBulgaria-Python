@@ -1,7 +1,7 @@
 import db_creation_query as queries
 import sqlite3
-import settings.settings as settings
-import query.db_creation_query as query
+import cinema.settings.settings as settings
+import cinema.queries.db_creation_query as query
 
 class DatabaseCreator:
     def __init__(self, connection_string, db_creation_queries_file):
@@ -10,7 +10,7 @@ class DatabaseCreator:
         self.db.row_factory = sqlite3.Row
         self.cursor = self.db.cursor()
         # self.db_creation_queries = db_creation_queries_file
-        self.db_creation_queries = 'query/db_creation_query.py'
+        self.db_creation_queries = db_creation_queries_file
     # This method is used to execute and commit queries
     def __execute_commit(self, query):
         self.cursor.execute(query)

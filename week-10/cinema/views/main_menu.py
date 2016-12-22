@@ -21,7 +21,7 @@ class MainMenu:
     # Prints main menu options
     def __print_main_menu(self):
         for k, v in self.r.MAIN_MENU_OPTIONS_DICT.items():
-            # Print main menu option 
+            # Print main menu option
             print(str(k) + self.r.MAIN_MENU_OPTIONS_SEPARATOR + ' ' + v)
 
      # main user interaction is done here
@@ -41,7 +41,8 @@ class MainMenu:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     if self.vm.login(username, password):
-                        print('bravo be lognat si')
+                        # TODO: Start logged in interaction
+                        pass
                     else:
                         print(self.r.LOGIN_FAILED_MESSAGE)
                 # Register option
@@ -49,18 +50,13 @@ class MainMenu:
                     # todo: usernames MUST be unique
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
-
-                    # Validate password against password constraints
-                    if not self.__is_valid_password(password):
-                        print(self.r.REGISTRATION_FAILED_MESSAGE)
-                        continue
                     conf_password = getpass(self.r.CONFIRM_PASSWORD_MESSAGE)
 
                     if password != conf_password:
                         print(self.r.PASSWORD_MISMATCH_MESSAGE)
                         continue
                     age = input(self.r.ENTER_AGE_MESSAGE)
-                    self.cinema_instance.register(username, password, age)
+                    self.vm.register(username, password, age)
                     # todo: add some sort of verification that registration was successful?
                     return self.__logged_in_interaction(username)
                 # Help menu option
