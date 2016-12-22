@@ -1,4 +1,7 @@
+import cinema.view_models.view_models as view_models
 from getpass import getpass
+
+
 class MainMenu:
     def __init__(self, resource_file, settings_file):
         self.r = resource_file
@@ -8,6 +11,8 @@ class MainMenu:
         # same goes for closing app after user logged out
         self.closing_app = False
         print(self.__start_ui())
+        # set the viewmodel
+        self.vm = view_models.ViewModel()
 
     # Acts like a second constructor for printing to console
     def __start_ui(self):
@@ -16,7 +21,7 @@ class MainMenu:
     # Prints main menu options
     def __print_main_menu(self):
         for k, v in self.r.MAIN_MENU_OPTIONS_DICT.items():
-            # Print main menu options     
+            # Print main menu option 
             print(str(k) + self.r.MAIN_MENU_OPTIONS_SEPARATOR + ' ' + v)
 
      # main user interaction is done here
@@ -35,10 +40,8 @@ class MainMenu:
                 if comm == self.settings.MAIN_MENU_OPTIONS[1]:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
-                    if self.cinema_instance.login(username, password):
-                        # Start logged in user interaction
-                        self.__logged_in_interaction(username)
-
+                    if self.vm.login(username, password):
+                        print('bravo be lognat si')
                     else:
                         print(self.r.LOGIN_FAILED_MESSAGE)
                 # Register option
