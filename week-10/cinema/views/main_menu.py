@@ -42,12 +42,11 @@ class MainMenu:
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     if self.vm.login(username, password):
                         # TODO: Start logged in interaction
-                        pass
+                        print ('logna sa')
                     else:
                         print(self.r.LOGIN_FAILED_MESSAGE)
                 # Register option
                 elif comm == self.settings.MAIN_MENU_OPTIONS[2]:
-                    # todo: usernames MUST be unique
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     conf_password = getpass(self.r.CONFIRM_PASSWORD_MESSAGE)
@@ -55,10 +54,10 @@ class MainMenu:
                     if password != conf_password:
                         print(self.r.PASSWORD_MISMATCH_MESSAGE)
                         continue
-                    age = input(self.r.ENTER_AGE_MESSAGE)
-                    self.vm.register(username, password, age)
+                    self.vm.register(username, password)
                     # todo: add some sort of verification that registration was successful?
-                    return self.__logged_in_interaction(username)
+                    print('GOTOVO')
+                    return #self.__logged_in_interaction(username)
                 # Help menu option
                 elif comm == self.settings.MAIN_MENU_OPTIONS[3]:
                     print(self.__print_main_menu())
