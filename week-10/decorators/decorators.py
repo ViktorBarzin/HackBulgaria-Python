@@ -5,8 +5,8 @@ def accepts(*args):
     def accepter(func):
         def check_type(*func_args, **func_kwargs):
             for i in range(len(args)):
-                if type(func_args[i]).__name__ != args[i].__name__:
-                    raise TypeErro?!?jedi=1, r('Argument {0} o?!? (*args, **kwargs) ?!?jedi?!?'f {1} is not {2}'
+                if  isinstance(func_args[i], args[i]):
+                    raise TypeError('Argument {0} of {1} is not {2}'
                             .format(i, func.__name__, args[i].__name__))
             return func(*func_args, **func_kwargs)
         return check_type
@@ -33,8 +33,8 @@ def encrypt(key):
     return get_func
 
 def log(file_name):
-    def get_func(func, *args, **kwargs):
-        def log_process(*args): # Why the *args?
+    def get_func(func):
+        def log_process(*args, **kwargs):
             with open(file_name, 'a') as w:
                 w.write('{0} was called at {1}\n'.format(func.__name__, datetime.now()))
             return func(*args, **kwargs)
