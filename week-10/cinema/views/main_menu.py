@@ -30,9 +30,10 @@ class MainMenu:
         comm = str(input(self.r.CHOOSE_OPTION_MESSAGE)).lower()
         while comm != self.r.EXIT:
             try:
-                if comm == 'help':
+                if comm == 'help' or comm == '?':
                     self.__print_main_menu()
                     continue
+
                 comm = self.settings.MAIN_MENU_OPTIONS[int(comm)]
 
                 # todo: make 1 check only
@@ -56,7 +57,7 @@ class MainMenu:
                         continue
                     self.vm.register(username, password)
                     # todo: add some sort of verification that registration was successful?
-                    print('GOTOVO')
+                    print('regna sa')
                     return #self.__logged_in_interaction(username)
                 # Help menu option
                 elif comm == self.settings.MAIN_MENU_OPTIONS[3]:

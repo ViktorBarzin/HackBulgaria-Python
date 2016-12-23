@@ -291,3 +291,4 @@ class UserInterface:
                 if self.closing_app:
                     return
                 comm = input(self.r.CHOOSE_OPTION_MESSAGE)
+

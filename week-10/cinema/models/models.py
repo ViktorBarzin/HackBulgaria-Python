@@ -14,7 +14,7 @@ class DbContext:
     def login(self, username, password):
         result = self.cursor.execute(select.VALIDATE_USER, (username, ))
         user = result.fetchone()
-        print(password, user['PASSWORD'])
+        # Add an Is_Active field to stop logging multiple times
         if user is not None and user['PASSWORD'] == password:
             return True
         return False
