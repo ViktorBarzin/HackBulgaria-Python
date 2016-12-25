@@ -8,6 +8,10 @@ MAIN_MENU_OPTIONS_SEPARATOR = ')'
 MAIN_MENU_OPTIONS_DICT = {1: 'Login', 2: 'Register', 3: 'Help', 4: 'Exit'}
 EXIT = 'exit'  # todo: try to move in a dict
 
+# Logged in menu options
+LOGGED_IN_MENU_OPTIONS_DICT = {1: 'Show movies', 2: 'show movie projections for <movie>',
+        3: 'Make reservation', 4: 'Cancel reservation', 5: 'help', 6: 'exit'}
+
 # Error messages
 VALUE_ERROR_MESSAGE = 'Entered value is invalid!'
 INVALID_OPTION_MESSAGE = 'Invalid option!'
@@ -21,15 +25,12 @@ ENTER_AGE_MESSAGE = 'Enter your age:'
 
 
 PASSWORD_MISMATCH_MESSAGE = 'Passwords did not match, you must restart the registration process'
-WELCOME_PATIENT_MESSAGE = 'Hi {0}, \n You are a patient in Hospital Manager.\n You have the abilities to:'
-WELCOME_DOCTOR_MESSAGE = 'Hi, {0},\n You are a {1} in Hospital Manager.\n You have the abilities to:'
 LOGIN_FAILED_MESSAGE = 'Login failed! Try again.'
 
 
 SUCCESSFULLY_LOGGED_OUT = 'You have succesfully logged out!'
 
 CHANGE_USERNAME_PROMPT = 'Do you wish to change your username? (y/N):'
-CHANGE_AGE_PROMPT = 'Do you wish to change your age? (y/N):'
 YES_OPTION = 'y'
 NO_OPTION = 'n'
 

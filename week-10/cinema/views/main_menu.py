@@ -1,4 +1,5 @@
 import cinema.view_models.view_models as view_models
+import cinema.views.logged_in_menu as logged_in_menu
 from getpass import getpass
 
 
@@ -42,8 +43,9 @@ class MainMenu:
                     username = input(self.r.ENTER_USERNAME_MESSAGE)
                     password = getpass(self.r.ENTER_PASSWORD_MESSAGE)
                     if self.vm.login(username, password):
-                        # TODO: Start logged in interaction
-                        print ('logna sa')
+                        session = logged_in_menu.LoggedInMenu(username)
+                        session.start_interaction(username)
+                        self.__print_main_menu()
                     else:
                         print(self.r.LOGIN_FAILED_MESSAGE)
                 # Register option
@@ -57,11 +59,12 @@ class MainMenu:
                         continue
                     self.vm.register(username, password)
                     # todo: add some sort of verification that registration was successful?
-                    print('regna sa')
-                    return #self.__logged_in_interaction(username)
+                    session = logged_in_menu.LoggedInMenu(username)
+                    session.start_interaction(username)
+                    self.__print_main_menu()
                 # Help menu option
                 elif comm == self.settings.MAIN_MENU_OPTIONS[3]:
-                    print(self.__print_main_menu())
+                    self.__print_main_menu()
                 # Exit option
                 elif comm == self.settings.MAIN_MENU_OPTIONS[4]:
                     self.closing_app = True
@@ -76,4 +79,4 @@ class MainMenu:
                 if self.closing_app:
                     return
                 comm = input(self.r.CHOOSE_OPTION_MESSAGE)
-       
+
