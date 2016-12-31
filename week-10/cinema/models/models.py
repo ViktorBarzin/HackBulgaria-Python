@@ -18,7 +18,18 @@ class DbContext:
         if user is not None and user['PASSWORD'] == password:
             return True
         return False
-    
+
     def register(self, username, password):
         self.cursor.execute(insert.REGISTER, (username, password))
+        self.db.commit()
+
+    def show_all_movies(self):
+        return self.cursor.execute(select.SHOW_ALL_MOVIES).fetchall()
+
+    def get_all_projections_for(self, movie_id):
+        result = self.cursor.execute(select.SELECT_PROJECTIONS_FOR_MOVIE, (movie_id,))
+        return result.fetchall()
+
+    def create_reservation(self, user_id, projection_id, row, col):
+        self.cursor.execute(insert.CREATE_RESERVATION, (user_id, projection_id, row, col))
         self.db.commit()

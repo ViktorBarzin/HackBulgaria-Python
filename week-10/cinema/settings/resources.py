@@ -9,7 +9,7 @@ MAIN_MENU_OPTIONS_DICT = {1: 'Login', 2: 'Register', 3: 'Help', 4: 'Exit'}
 EXIT = 'exit'  # todo: try to move in a dict
 
 # Logged in menu options
-LOGGED_IN_MENU_OPTIONS_DICT = {1: 'Show movies', 2: 'show movie projections for <movie>',
+LOGGED_IN_MENU_OPTIONS_DICT = {1: 'Show movies', 2: 'Show movie projections for <movie>',
         3: 'Make reservation', 4: 'Cancel reservation', 5: 'help', 6: 'exit'}
 
 # Error messages

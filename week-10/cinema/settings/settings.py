@@ -9,3 +9,6 @@ MAIN_MENU_OPTIONS = {1: 'login', 2: 'register', 3: 'help', 4: 'exit'}
 LOGOUT_KEY = '__logout'
 # The below constant is used in registration
 MAX_FAILED_PASSWORD_ATTEMPTS = 3
+
+CINEMA_HALL_SIZE = (10, 10)
+
