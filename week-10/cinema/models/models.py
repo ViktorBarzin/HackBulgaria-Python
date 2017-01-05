@@ -1,5 +1,5 @@
 import cinema.helpers.queries.insertion_queries as insert
-import cinema.helpers.queries.update_queries as update
+# import cinema.helpers.queries.update_queries as update
 import cinema.helpers.queries.delete_queries as delete
 import cinema.helpers.queries.select_queries as select
 import sqlite3
@@ -32,4 +32,19 @@ class DbContext:
 
     def create_reservation(self, user_id, projection_id, row, col):
         self.cursor.execute(insert.CREATE_RESERVATION, (user_id, projection_id, row, col))
+        self.db.commit()
+
+    def get_user_id(self, username):
+        return self.cursor.execute(select.GET_USER_ID_FROM_USERNAME, (username,)).fetchone()['ID']
+
+    def get_all_reservations_for_projection(self, projection_key):
+        return self.cursor.execute(select.GET_ALL_RESERVATIONS_FOR_PROJECTION, (projection_key,)).fetchall()
+
+    def get_all_user_reversations(self, user_id):
+        # Returns : Rows<reservation.id, movie.name, projection.date,
+        # projection.time>
+        return self.cursor.execute(select.GET_ALL_PROJECTIONS_RESERVATIONS_MOVIES_FOR_USER, (user_id,)).fetchall()
+
+    def delete_reservation(self, user_id, projection_key):
+        result = self.cursor.execute(delete.DELETE_RESERVATION, (projection_key, user_id))
         self.db.commit()

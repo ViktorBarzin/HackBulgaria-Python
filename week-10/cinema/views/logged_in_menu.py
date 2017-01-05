@@ -14,13 +14,13 @@ class LoggedInMenu():
         self.help_commands = ['help', 'h']
 
     def __print_menu_options(self):
-        for k,v in self.r.LOGGED_IN_MENU_OPTIONS_DICT.items():
-            print('{0}) {1}'.format(k,v))
+        for k, v in self.r.LOGGED_IN_MENU_OPTIONS_DICT.items():
+            print('{0}) {1}'.format(k, v))
 
     def __show_all_movies(self):
         movies = self.vm.show_all_movies()
         for movie in movies:
-            print ('[{}] - "{}" ({})'.format(movie['ID'], movie['NAME'], movie['RATING']))
+            print('[{}] - "{}" ({})'.format(movie['ID'], movie['NAME'], movie['RATING']))
 
     def __continue_reservation(self):
         quit_registration = input('Do you want to cancel your reservation[Y/n]:')
@@ -33,17 +33,22 @@ class LoggedInMenu():
             print('There are no projections')
             return
         for projection in result_projections:
-            print('[{}] - {} {} ({})'.format(projection['ID'], projection['DATE'], projection['TIME'], projection['TYPE'] ))
+            print('[{}] - {} {} ({})'.format(projection['ID'], projection['DATE'], projection['TIME'], projection['TYPE']))
 
     def __print_reservation(self, movie, projection, seats):
         print('This is your reservation:\nMovie:{} {}\nDate and time: {} {}\nSeats: {}'.format(movie['NAME'], movie['RATING'],
-            projection['DATE'], projection['TIME'], ', '.join([str(x) for x in seats])))
+                projection['DATE'], projection['TIME'], ', '.join([str(x) for x in seats])))
 
+    def __print_user_reservations(self, user_id):
+        reservations = self.vm.get_all_user_reservations(user_id)
+        for r in reservations:
+            print('{0}) {1} on {2} {3}'.format(r['PROJECTION_ID'], r['MOVIE_NAME'], r['PROJECTION_DATE'], r['PROJECTION_TIME']))
 
     def start_interaction(self, username):
         print('hi ' + username)
         self.__print_menu_options()
         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
+        user_id = self.vm.get_user_id(username)
 
         while comm not in self.logout_commands:
             try:
@@ -114,7 +119,7 @@ class LoggedInMenu():
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
                 self.__print_projections(projections)
-               # Get projection id
+                # Get projection id
                 try:
                     projection_id = int(input('Select projection date:'))
                     if projection_id not in [x['ID'] for x in projections]:
@@ -131,7 +136,7 @@ class LoggedInMenu():
                 # Get row and col
                 try:
                     for i in range(number_of_tickets):
-                        row_col = [int(x) for x in re.split('[^0-9]',input('Cinema size is ({},{})\nChoose seat {}(row,col):'.format(self.settings.CINEMA_HALL_SIZE[0], self.settings.CINEMA_HALL_SIZE[1], i + 1))) if x != '']
+                        row_col = [int(x) for x in re.split('[^0-9]', input('Cinema size is ({},{})\nChoose seat {}(row,col):'.format(self.settings.CINEMA_HALL_SIZE[0], self.settings.CINEMA_HALL_SIZE[1], i + 1))) if x != '']
                         row = row_col[0]
                         col = row_col[1]
                         if row > self.settings.CINEMA_HALL_SIZE[0] or col > self.settings.CINEMA_HALL_SIZE[1]:
@@ -148,15 +153,39 @@ class LoggedInMenu():
                 projection = [x for x in projections if x['ID'] == projection_id][0]
                 # print(movie['NAME'])
                 self.__print_reservation(movie, projection, seats)
+
+                should_finalize = True
                 finalize_reservation = input('Confirm your reservation (type "finalize"):')
-               # TODO: continue from finalizing and rething design for easy
-               # deletion of reservation after 
-                for ticket in seats:
-                    # call vm and add new reservation for each ticket
-                    pass
+                if finalize_reservation.lower() != 'finalize' and finalize_reservation.lower() != 'y' and\
+                        finalize_reservation.lower() != 'yes':
+                        should_finalize = False
+                        if self.__continue_reservation():
+                            should_finalize = True
+                        else:
+                            comm = input(self.r.CHOOSE_OPTION_MESSAGE)
+                            continue
+                if should_finalize:
+                    for ticket in seats:
+                        # Option to cancel reservation here?
+                        if not self.vm.create_reservation(user_id, projection['ID'], ticket[0], ticket[1]):
+                            print('Seats "{0}" already taken! Not saving those.'.format(ticket))
+                        else:
+                            print('Saved {}'.format(ticket))
+
             # Cancel reservation
             elif comm == 4:
-                pass
+                # This works as cancel all reservations for a user but oh well
+                self.__print_user_reservations(user_id)
+                # Get reservation id
+                try:
+                    projection_id = int(input('Enter projection id:'))
+                    # Add check if there is such a registration
+                    self.vm.cancel_registration(user_id, projection_id)
+                    print('Successfully deleted reservation!')
+                except ValueError:
+                    print('Invalid value!')
+                    comm = input(self.r.CHOOSE_OPTION_MESSAGE)
+
             # Help
             elif comm == 5:
                 pass
@@ -166,8 +195,5 @@ class LoggedInMenu():
 
             comm = input(self.r.CHOOSE_OPTION_MESSAGE)
             # Add the following line as decorator
-            #os.system('clear')
-
-
-
+            # os.system('clear')
 
