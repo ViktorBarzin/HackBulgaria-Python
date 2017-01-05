@@ -188,7 +188,8 @@ class LoggedInMenu():
 
             # Help
             elif comm == 5:
-                pass
+                self.__print_menu_options()
+                comm = input(self.r.CHOOSE_OPTION_MESSAGE)
             # Exit
             elif comm == 6:
                 return
