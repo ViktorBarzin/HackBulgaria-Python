@@ -6,7 +6,7 @@ import cinema.settings.settings as settings
 def main():
     user_interface = main_menu.MainMenu(resource_file, settings)
     user_interface.start_interaction()
-    # TODO: main functionality done, hash passwords, add decorators
+    # TODO: add more decorators?
 
 
 if __name__ == '__main__':
