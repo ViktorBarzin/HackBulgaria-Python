@@ -1,6 +1,7 @@
 import cinema.view_models.view_models as view_models
 import cinema.views.logged_in_menu as logged_in_menu
 from getpass import getpass
+from cinema.helpers.decorators import clear_screen
 
 
 class MainMenu:
@@ -20,12 +21,14 @@ class MainMenu:
         return self.r.LOAD_UP
 
     # Prints main menu options
+    @clear_screen
     def __print_main_menu(self):
         for k, v in self.r.MAIN_MENU_OPTIONS_DICT.items():
             # Print main menu option
             print(str(k) + self.r.MAIN_MENU_OPTIONS_SEPARATOR + ' ' + v)
 
-     # main user interaction is done here
+    # main user interaction is done here
+    @clear_screen
     def start_interaction(self):
         self.__print_main_menu()
         comm = str(input(self.r.CHOOSE_OPTION_MESSAGE)).lower()
@@ -72,7 +75,7 @@ class MainMenu:
 
             except ValueError:
                 print(self.r.VALUE_ERROR_MESSAGE)
-                print(self.r.ENTER_HELP_TO_SEE_HELP_MENU)
+                self.__print_main_menu()
             except KeyError:
                 print(self.r.VALUE_ERROR_MESSAGE)
             finally:

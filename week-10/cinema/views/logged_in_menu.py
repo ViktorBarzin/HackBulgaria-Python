@@ -2,6 +2,7 @@ import cinema.settings.resources as resources
 import re
 import cinema.view_models.view_models as view_models
 import cinema.settings.settings as settings
+from cinema.helpers.decorators import clear_screen
 
 
 class LoggedInMenu():
@@ -13,10 +14,12 @@ class LoggedInMenu():
         self.logout_commands = ['6', 'exit', 'quit']
         self.help_commands = ['help', 'h']
 
+    @clear_screen
     def __print_menu_options(self):
         for k, v in self.r.LOGGED_IN_MENU_OPTIONS_DICT.items():
             print('{0}) {1}'.format(k, v))
 
+    @clear_screen
     def __show_all_movies(self):
         movies = self.vm.show_all_movies()
         for movie in movies:
@@ -28,10 +31,12 @@ class LoggedInMenu():
             return False
         return True
 
-    def __print_projections(self, result_projections):
+    @clear_screen
+    def __print_projections(self, result_projections, movie_name):
         if len(result_projections) == 0:
             print('There are no projections')
             return
+        print('Projections for {}:'.format(movie_name))
         for projection in result_projections:
             print('[{}] - {} {} ({})'.format(projection['ID'], projection['DATE'], projection['TIME'], projection['TYPE']))
 
@@ -39,11 +44,14 @@ class LoggedInMenu():
         print('This is your reservation:\nMovie:{} {}\nDate and time: {} {}\nSeats: {}'.format(movie['NAME'], movie['RATING'],
                 projection['DATE'], projection['TIME'], ', '.join([str(x) for x in seats])))
 
+    @clear_screen
     def __print_user_reservations(self, user_id):
         reservations = self.vm.get_all_user_reservations(user_id)
+        print('There are your reservations:')
         for r in reservations:
             print('{0}) {1} on {2} {3}'.format(r['PROJECTION_ID'], r['MOVIE_NAME'], r['PROJECTION_DATE'], r['PROJECTION_TIME']))
 
+    @clear_screen
     def start_interaction(self, username):
         print('hi ' + username)
         self.__print_menu_options()
@@ -80,7 +88,7 @@ class LoggedInMenu():
                     print('Invalid movie id')
 
                 result_projections = self.vm.show_projections_for_movie(movie_id, date)
-                self.__print_projections(result_projections)
+                self.__print_projections(result_projections, movie['NAME'])
 
             # Make a reservation
             elif comm == 3:
@@ -110,6 +118,8 @@ class LoggedInMenu():
                     else:
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
+
+                movie = [x for x in all_movies if x['ID'] == movie_id][0]
                 projections = self.vm.show_projections_for_movie(movie_id)
                 if len(projections) == 0:
                     choose_another_movie = input('There are no projections for this movie.\nDo you wish to make a reservation for another one?[Y/n]:')
@@ -118,7 +128,7 @@ class LoggedInMenu():
                     else:
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
-                self.__print_projections(projections)
+                self.__print_projections(projections, movie['NAME'])
                 # Get projection id
                 try:
                     projection_id = int(input('Select projection date:'))

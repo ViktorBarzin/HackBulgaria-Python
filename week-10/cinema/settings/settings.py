@@ -12,3 +12,4 @@ MAX_FAILED_PASSWORD_ATTEMPTS = 3
 
 CINEMA_HALL_SIZE = (10, 10)
 
+LOG_FILE = 'cinema/logs/logs.txt'

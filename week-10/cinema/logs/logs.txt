@@ -1,0 +1,15 @@
+
+Registered a new user! Current time: 2017-01-07 02:04:02.672967
+Registered a new user! Current time: 2017-01-07 02:04:17.224537
+Registered a new user! Current time: 2017-01-07 03:19:49.632290
+Registered a new user! Current time: 2017-01-07 03:22:14.908237
+Registered a new user! Current time: 2017-01-07 03:23:26.145834
+Registered a new user! Current time: 2017-01-07 03:32:32.785151
+Created new reservation! Current time: 2017-01-07 03:54:00.307823
+Created new reservation! Current time: 2017-01-07 03:54:00.328029
+A reservation was deleted! Current time: 2017-01-07 03:54:56.005462
+Created new reservation! Current time: 2017-01-07 03:56:49.160571
+Created new reservation! Current time: 2017-01-07 04:00:01.909314
+Created new reservation! Current time: 2017-01-07 04:00:01.924724
+A reservation was deleted! Current time: 2017-01-07 04:00:11.216215
+A reservation was deleted! Current time: 2017-01-07 04:00:15.550260

@@ -48,3 +48,4 @@ class DbContext:
     def delete_reservation(self, user_id, projection_key):
         result = self.cursor.execute(delete.DELETE_RESERVATION, (projection_key, user_id))
         self.db.commit()
+        return result
