@@ -9,7 +9,6 @@ def simplify_fraction(fraction):
         nominator_divisors = get_divisors(a)
         denominator_divisors = get_divisors(b)
         return set(nominator_divisors) & set(denominator_divisors)
-    
     fraction[0] = int(fraction[0])
     fraction[1] = int(fraction[1])
     biggest_divisor = max(get_common_divisors(fraction[0], fraction[1]))
@@ -24,7 +23,7 @@ def sort_fractions(fractions):
     for f in fractions:
         multiplier *= f[1]
 
-    sorted_expanded_fractions= list(sorted([expand(f, multiplier // f[1]) for f in fractions]))
+    sorted_expanded_fractions = list(sorted([expand(f, multiplier // f[1]) for f in fractions]))
 
     # Uncomment for improving performance and simplifying fraction
     # return ([simplify_fraction(f) for f in sorted_expanded_fractions])
@@ -41,6 +40,7 @@ def sort_fractions(fractions):
 
     return result
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     print(simplify_fraction(sys.argv[1].split('/')))
 
