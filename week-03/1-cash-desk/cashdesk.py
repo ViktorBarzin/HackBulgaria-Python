@@ -32,7 +32,7 @@ class Bill:
             raise ValueError('Negative value:{0}'.format(value))
 
 
-class BillBatch:
+class BatchBill:
     def __init__(self, bills):
         self.is_list_of_bills(bills)
         self._bills = bills
