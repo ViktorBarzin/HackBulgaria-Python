@@ -1,1 +1,0 @@
-CONNECTION_STRING = 'bank.db'
