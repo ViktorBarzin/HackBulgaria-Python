@@ -1,9 +1,10 @@
-import sql_manager
+import sql_manager as db_manager
 
 
 def main_menu():
+    # TODO: continue bugxifing for login and reg
     print("Welcome to our bank service. You are not logged in. \nPlease register or login")
-
+    sql_manager=  db_manager.Db_Manager
     while True:
         command = input("$$$>")
 
@@ -11,9 +12,10 @@ def main_menu():
             username = input("Enter your username: ")
             password = input("Enter your password: ")
 
-            sql_manager.register(username, password)
-
-            print("Registration Successfull")
+            if sql_manager.register(username, password):
+                print("Registration Successfull")
+            else:
+                print('Password does not meet requirments!')
 
         elif command == 'login':
             username = input("Enter your username: ")
@@ -66,8 +68,9 @@ def logged_menu(logged_user):
 
 
 def main():
-    sql_manager.create_clients_table()
+    #sql_manager.create_clients_table()
     main_menu()
+
 
 if __name__ == '__main__':
     main()

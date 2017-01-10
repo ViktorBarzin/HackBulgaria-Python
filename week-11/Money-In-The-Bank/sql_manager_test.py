@@ -50,5 +50,9 @@ class SqlManagerTests(unittest.TestCase):
         logged_user_new_password = sql_manager.login('Tester', new_password)
         self.assertEqual(logged_user_new_password.get_username(), 'Tester')
 
+    def test_valid_password_register(self):
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()
