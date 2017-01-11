@@ -1,27 +1,30 @@
 import sql_manager as db_manager
+from getpass import getpass
+
+
+sql_manager = db_manager.Db_Manager()
 
 
 def main_menu():
-    # TODO: continue bugxifing for login and reg
+    global sql_manager
     print("Welcome to our bank service. You are not logged in. \nPlease register or login")
-    sql_manager=  db_manager.Db_Manager
     while True:
         command = input("$$$>")
 
         if command == 'register':
             username = input("Enter your username: ")
-            password = input("Enter your password: ")
+            password = getpass("Enter your password: ")
 
             if sql_manager.register(username, password):
                 print("Registration Successfull")
             else:
-                print('Password does not meet requirments!')
+                print('Password does not meet requirements!')
 
         elif command == 'login':
             username = input("Enter your username: ")
-            password = input("Enter your password: ")
+            password = getpass("Enter your password: ")
 
-            logged_user = sql_manager.login(username, password)
+            logged_user = sql_manager.login(username=username, password=password)
 
             if logged_user:
                 logged_menu(logged_user)
@@ -40,6 +43,7 @@ def main_menu():
 
 
 def logged_menu(logged_user):
+    global sql_manager
     print("Welcome you are logged in as: " + logged_user.get_username())
     while True:
         command = input("Logged>>")
@@ -50,7 +54,7 @@ def logged_menu(logged_user):
             print("Your balance is:" + str(logged_user.get_balance()) + '$')
 
         elif command == 'changepass':
-            new_pass = input("Enter your new password: ")
+            new_pass = getpass("Enter your new password: ")
             sql_manager.change_pass(new_pass, logged_user)
 
         elif command == 'change-message':
@@ -68,7 +72,7 @@ def logged_menu(logged_user):
 
 
 def main():
-    #sql_manager.create_clients_table()
+    # sql_manager.create_clients_table()
     main_menu()
 
 
