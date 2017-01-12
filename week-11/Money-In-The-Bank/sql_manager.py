@@ -4,12 +4,11 @@ import creation_queries as create_db
 import update_queries as update
 import select_queries as select
 import insert_queries as insert
-import json
 import random
-import datetime
 from decorators import hash_password, check_password_requirements, check_username_requirements, check_if_banned, check_ban_list_file, check_email_requirements
 from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY
 from client import Client
+from helpers import add_user_to_ban_list_json, ban_list_json_to_dict, change_failed_password_attempts, clear_login_ban_records
 
 
 class Db_Manager:
@@ -128,55 +127,16 @@ class Db_Manager:
         self.cursor.execute(select.LOGIN, (username, password))
         user = self.cursor.fetchone()
         if(user):
-            self.clear_login_ban_records(username)
+            clear_login_ban_records(ban_file, username, WRONG_PASSWORD_ATTEPMTS)
             return Client(user['ID'], user['USERNAME'], user['BALANCE'], user['MESSAGE'])
         else:
             # If such user exists, put a black point, else just ignore
             if username in [x['username'] for x in self.get_all_users()]:
-                self._change_failed_password_attempts(username, 1)
+                change_failed_password_attempts(ban_file, username, 1)
             return False
 
     def get_all_users(self):
         return self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
-
-    def __ban_json_to_dict(self):
-        with open(ban_file, 'r') as r:
-            return json.load(r)
-
-    # Reusing this in the decorators which is not ok but I ain't gonna copy
-    # paste this over there as well..
-    def clear_login_ban_records(self, username):
-        self._change_failed_password_attempts(username, -WRONG_PASSWORD_ATTEPMTS)
-
-    # Updates failed attempts to login for a user
-    # update is the actual value to be change with
-    @check_ban_list_file
-    def _change_failed_password_attempts(self, username, update):
-        data = self.__ban_json_to_dict()
-        try:
-            user = [x for x in data if x['username'] == username][0]
-            user['wrong-attempts'] += update
-            user['ban-start-date'] = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            if user['wrong-attempts'] < 0:
-                user['wrong-attempts'] = 0
-        except IndexError:
-            self.__add_user_to_ban_list(username)
-            return
-
-        # Save changes to .json file
-        with open(ban_file, 'w') as w:
-            w.write(json.dumps(data))
-
-    def __add_user_to_ban_list(self, username):
-        # Asserts ban-list file is not empty
-        data = self.__ban_json_to_dict()
-        with open(ban_file, 'w') as w:
-            data.append({})
-            data[-1]['username'] = username
-            data[-1]['ban-start-date'] = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            data[-1]['wrong-attempts'] = 1
-
-            w.write(json.dumps(data))
 
     def check_token(self, username, token):
         try:

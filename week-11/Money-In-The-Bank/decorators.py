@@ -2,8 +2,8 @@ import re
 import json
 import hashlib
 import datetime
-from settings import WRONG_PASSWORD_ATTEPMTS, BAN_TIME, BAN_LIST_FILE
-import sql_manager as sql_man
+from settings import WRONG_PASSWORD_ATTEPMTS, BAN_TIME, BAN_LIST_FILE, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS as max_password_attempts
+from helpers import clear_login_ban_records
 
 
 def check_password_requirements(func):
@@ -70,8 +70,7 @@ def check_if_banned(file_to_check_in):
 
                 # Have to reset failed attempts
                 # Bad practice but oh well
-                db = sql_man.Db_Manager()
-                db.clear_login_ban_records(user['username'])
+                clear_login_ban_records(ban_file, user['username'], max_password_attempts)
                 # Should be ok to login cuz his ban has timed out
                 return func(*args, **kwargs)
             # User is allowed to log in
