@@ -65,12 +65,13 @@ def check_if_banned(file_to_check_in):
                 if (user_ban_start_time + datetime.timedelta(seconds=BAN_TIME)) > current_time:
                     # Do some calculation to show remaining time of ban
                     time_left_from_ban = (user_ban_start_time + datetime.timedelta(seconds=BAN_TIME)) - current_time
-                    # TODO : fix timings and done!
-                    raise ValueError('You have entered an invalid password too many times!\nYou must wait {} seconds until trying in again'.format(time_left_from_ban))
+                    print('You have entered an invalid password too many times!\nYou must wait {} seconds until trying in again'.format(time_left_from_ban))
+                    return False
+
                 # Have to reset failed attempts
                 # Bad practice but oh well
                 db = sql_man.Db_Manager()
-                db.clear_login_ban_records(user['username']) 
+                db.clear_login_ban_records(user['username'])
                 # Should be ok to login cuz his ban has timed out
                 return func(*args, **kwargs)
             # User is allowed to log in
@@ -88,3 +89,12 @@ def check_ban_list_file(func):
                 r.write('[]')
         return func(*args, **kwargs)
     return fix_ban_file
+
+
+def check_email_requirements(func):
+    def accepter(*args, **kwargs):
+        email = kwargs['email']
+        if re.match('.*\w+@\w+.\w+.*', email):
+            return func(*args, **kwargs)
+        raise ValueError('Invalid email address!')
+    return accepter

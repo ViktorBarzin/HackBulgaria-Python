@@ -14,8 +14,9 @@ def main_menu():
         if command == 'register':
             username = input("Enter your username: ")
             password = getpass("Enter your password: ")
+            email = input('Enter your email(used for password resetting):')
 
-            if sql_manager.register(username, password):
+            if sql_manager.register(username, password, email):
                 print("Registration Successfull")
             else:
                 print('Password does not meet requirements!')
@@ -31,6 +32,24 @@ def main_menu():
             else:
                 print("Login failed")
 
+        elif command == 'reset-password':
+            username = input('Enter your username:')
+            if not username:
+                print('Username cannot be empty!')
+            else:
+                try:
+                    sql_manager.reset_password(username)
+                except ValueError as e:
+                    print(e)
+                    continue
+
+            print('A password reset token has been sent to you.')
+            token = input('Enter your token:')
+            if sql_manager.check_token(username, token):
+                password = getpass("Enter your new password: ")
+                # Add writing password again for verification?
+
+                sql_manager.change_pass(password, username)
         elif command == 'help':
             print("login - for logging in!")
             print("register - for creating new account!")

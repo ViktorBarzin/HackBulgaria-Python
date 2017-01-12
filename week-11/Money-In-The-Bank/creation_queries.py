@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS CLIENTS(
     USERNAME text,
     PASSWORD text,
     BALANCE real default 0,
-    MESSAGE text
+    MESSAGE text,
+    EMAIL text,
+    PASSWORD_RESET_TOKEN text
     )
 '''
