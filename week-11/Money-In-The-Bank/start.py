@@ -95,7 +95,11 @@ def logged_menu(logged_user):
             except ValueError:
                 print('Enter a positive number!')
                 continue
-            sql_manager.update_balance(logged_user.get_username(), amount)
+            try:
+                sql_manager.update_balance(logged_user.get_username(), amount)
+                print('Your balance has been successfully updated!')
+            except ValueError as e:
+                print(e)
 
         elif command == 'withdraw':
             try:
@@ -107,6 +111,7 @@ def logged_menu(logged_user):
                 continue
             try:
                 sql_manager.update_balance(logged_user.get_username(), -amount)
+                print('Your balance has been successfully updated!')
             except ValueError as e:
                 print(e)
 
@@ -116,7 +121,7 @@ def logged_menu(logged_user):
             except ValueError as e:
                 print(e)
                 continue
-            print('You have recieved you tan codes. Do not lose them!')
+            print('You have recieved your tan codes. Do not lose them!')
 
         elif command == 'help':
             print("info - for showing account info")

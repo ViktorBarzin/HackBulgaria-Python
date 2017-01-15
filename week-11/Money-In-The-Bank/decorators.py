@@ -2,9 +2,14 @@ import re
 import json
 import hashlib
 import datetime
-from settings import WRONG_PASSWORD_ATTEPMTS, BAN_TIME, BAN_LIST_FILE, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS as max_password_attempts
+import sqlite3
+from settings import WRONG_PASSWORD_ATTEPMTS, BAN_TIME, BAN_LIST_FILE, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS as max_password_attempts, CONNECTION_STRING
 from helpers import clear_login_ban_records
 
+
+conn = sqlite3.connect(CONNECTION_STRING)
+conn.row_factory = sqlite3.Row
+cursor = conn.cursor()
 
 def check_password_requirements(func):
     def accepter(*args, **kwargs):  # Taking username because all the funs do..
@@ -97,3 +102,4 @@ def check_email_requirements(func):
             return func(*args, **kwargs)
         raise ValueError('Invalid email address!')
     return accepter
+
