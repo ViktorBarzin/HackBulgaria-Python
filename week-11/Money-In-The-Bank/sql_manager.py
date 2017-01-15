@@ -1,15 +1,15 @@
-import sqlite3
-import smtplib
 import creation_queries as create_db
-import update_queries as update
-import select_queries as select
 import insert_queries as insert
 import random
+import select_queries as select
+import smtplib
+import sqlite3
+import update_queries as update
 import uuid
-from decorators import hash_password, check_password_requirements, check_username_requirements, check_if_banned, check_ban_list_file, check_email_requirements
-from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY, MAX_TAN_CODES
 from client import Client
+from decorators import hash_password, check_password_requirements, check_username_requirements, check_if_banned, check_ban_list_file, check_email_requirements
 from helpers import change_failed_password_attempts, clear_login_ban_records
+from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY, MAX_TAN_CODES
 
 
 class Db_Manager:
@@ -179,7 +179,7 @@ class Db_Manager:
         user_tan_codes = [x for x in tan_codes if x['USER_ID'] == user['ID']]
         # If the user has no tan_codes return
         if len(user_tan_codes) != 0:
-            raise ValueError('You have {} more codes!'.format(len(user_tan_codes)))
+            raise ValueError('You have {} more codes!'.format(MAX_TAN_CODES - len(user_tan_codes)))
 
         # User has no tan_codes so create and email to him new codes
         tans = [str(uuid.uuid4()) for x in range(MAX_TAN_CODES)]
