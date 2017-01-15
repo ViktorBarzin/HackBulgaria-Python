@@ -53,6 +53,7 @@ def main_menu():
         elif command == 'help':
             print("login - for logging in!")
             print("register - for creating new account!")
+            print('reset-password - for sending a reset password email')
             print("exit - for closing program!")
 
         elif command == 'exit':
@@ -83,11 +84,49 @@ def logged_menu(logged_user):
         elif command == 'show-message':
             print(logged_user.get_message())
 
+        elif command == 'show-balance':
+            print(sql_manager.show_balance(logged_user.get_username))
+
+        elif command == 'deposit':
+            try:
+                amount = float(input('Enter amount:').replace(' ', ''))
+                if amount <= 0:
+                    raise ValueError
+            except ValueError:
+                print('Enter a positive number!')
+                continue
+            sql_manager.update_balance(logged_user.get_username(), amount)
+
+        elif command == 'withdraw':
+            try:
+                amount = float(input('Enter amount:').replace(' ', ''))
+                if amount <= 0:
+                    raise ValueError
+            except ValueError:
+                print('Enter a positive number!')
+                continue
+            try:
+                sql_manager.update_balance(logged_user.get_username(), -amount)
+            except ValueError as e:
+                print(e)
+
+        elif command == 'get-tan':
+            try:
+                sql_manager.get_tan(logged_user.get_username())
+            except ValueError as e:
+                print(e)
+                continue
+            print('You have recieved you tan codes. Do not lose them!')
+
         elif command == 'help':
             print("info - for showing account info")
             print("changepass - for changing passowrd")
             print("change-message - for changing users message")
             print("show-message - for showing users message")
+        elif command == 'exit':
+            return
+        else:
+            print('Invalid command')
 
 
 def main():

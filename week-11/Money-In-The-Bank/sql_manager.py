@@ -5,10 +5,11 @@ import update_queries as update
 import select_queries as select
 import insert_queries as insert
 import random
+import uuid
 from decorators import hash_password, check_password_requirements, check_username_requirements, check_if_banned, check_ban_list_file, check_email_requirements
-from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY
+from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY, MAX_TAN_CODES
 from client import Client
-from helpers import add_user_to_ban_list_json, ban_list_json_to_dict, change_failed_password_attempts, clear_login_ban_records
+from helpers import change_failed_password_attempts, clear_login_ban_records
 
 
 class Db_Manager:
@@ -48,7 +49,8 @@ class Db_Manager:
         return username
 
     def create_clients_table(self):
-        self.cursor.execute(create_db.CREATE_CLIENT_TABLE)
+        # self.cursor.execute(create_db.CREATE_CLIENT_TABLE)
+        self.cursor.execute(create_db.CREATE_TAN_CODE_USER_TABLE)
 
     def change_message(self, new_message, logged_user):
         self.cursor.execute(update.CHANGE_MESSAGE, (new_message, logged_user.get_id()))
@@ -82,8 +84,9 @@ class Db_Manager:
         token = self.__set_reset_token_for(username)
         try:
             user = [x for x in self.get_all_users() if x['USERNAME'] == username][0]
-        except IndexError:
-            raise ValueError('No such user')
+        except IndexError as e:
+            print(e)
+        #     raise ValueError('No such user')
         self.__send_token_to_email(token, user['EMAIL'])
 
     def __send_token_to_email(self, token, email):
@@ -145,3 +148,45 @@ class Db_Manager:
             raise ValueError('There is no user with this username')
         return user['password_reset_token'] == str(token)
 
+    def show_balance(self, username):
+        try:
+            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
+            user = users[0]
+        except IndexError:
+            raise ValueError('No such user')
+        return user['balance']
+
+    def update_balance(self, username, amount):
+        try:
+            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
+            user = [x for x in users if x['USERNAME'] == username][0]
+        except IndexError:
+            raise ValueError('No such user')
+        new_balance = float(user['balance'] + amount)
+        if new_balance < 0:
+            raise ValueError('Cannot have negative balance!')
+        self.cursor.execute(update.CHANGE_BALANCE_FOR_USER, (new_balance, username))
+        self.conn.commit()
+        return True
+
+    def get_tan(self, username):
+        try:
+            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
+            user = [x for x in users if x['USERNAME'] == username][0]
+        except IndexError:
+            raise ValueError('No such user')
+        tan_codes = self.cursor.execute(select.SELECT_ALL_TAN_CODES).fetchall()
+        user_tan_codes = [x for x in tan_codes if x['USER_ID'] == user['ID']]
+        # If the user has no tan_codes return
+        if len(user_tan_codes) != 0:
+            raise ValueError('You have {} more codes!'.format(len(user_tan_codes)))
+
+        # User has no tan_codes so create and email to him new codes
+        tans = [str(uuid.uuid4()) for x in range(MAX_TAN_CODES)]
+        # Doing a for because executemany did not work out ;\
+        for tan in tans:
+            self.cursor.execute(insert.INSERT_TAN, (user['ID'], tan))
+        self.conn.commit()
+        # Email message
+        message = 'These are your unique TAN codes. Keep them safe!\n{}'.format('\n\n'.join(tans))
+        self.send_email(EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, user['email'], 'TAN codes', message)

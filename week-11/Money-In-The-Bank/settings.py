@@ -11,3 +11,5 @@ EMAIL_ACCOUNT_PASSWORD = credentials.email_password
 
 EMAIL_SUBJ = 'Password reset token'
 EMAIL_BODY = 'Your password reset token is:'  # note that at the end is added the token
+
+MAX_TAN_CODES = 10

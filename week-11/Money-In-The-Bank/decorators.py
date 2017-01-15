@@ -59,7 +59,7 @@ def check_if_banned(file_to_check_in):
             user = [x for x in data if x['username'] == username][0]
             current_time = datetime.datetime.now()
             user_ban_start_time = datetime.datetime.strptime(user['ban-start-date'], '%Y-%m-%d %H:%M:%S')
-            print(user['wrong-attempts'])
+            # print(user['wrong-attempts'])
             if user['wrong-attempts'] >= WRONG_PASSWORD_ATTEPMTS:
                 # print(user_ban_start_time + datetime.timedelta(seconds=BAN_TIME))
                 if (user_ban_start_time + datetime.timedelta(seconds=BAN_TIME)) > current_time:
