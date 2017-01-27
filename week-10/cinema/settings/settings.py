@@ -1,5 +1,6 @@
 CONNECTION_STRING = 'cinema/models/cinema.db'
-
+# CONNECTION_STRING = 'cinema.db'
+DB_TYPE = 'sqlite'
 
 DB_CREATION_QUERIES_FILE = 'db_creation_queries.py'
 

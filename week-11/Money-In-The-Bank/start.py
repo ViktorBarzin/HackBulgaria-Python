@@ -16,10 +16,11 @@ def main_menu():
             password = getpass("Enter your password: ")
             email = input('Enter your email(used for password resetting):')
 
-            if sql_manager.register(username, password, email):
+            try:
+                sql_manager.register(username, password, email)
                 print("Registration Successfull")
-            else:
-                print('Password does not meet requirements!')
+            except ValueError as e:
+                print(e)
 
         elif command == 'login':
             username = input("Enter your username: ")

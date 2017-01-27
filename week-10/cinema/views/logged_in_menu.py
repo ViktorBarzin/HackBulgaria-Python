@@ -23,7 +23,7 @@ class LoggedInMenu():
     def __show_all_movies(self):
         movies = self.vm.show_all_movies()
         for movie in movies:
-            print('[{}] - "{}" ({})'.format(movie['ID'], movie['NAME'], movie['RATING']))
+            print('[{}] - "{}" ({})'.format(movie.id, movie.name, movie.rating))
 
     def __continue_reservation(self):
         quit_registration = input('Do you want to cancel your reservation[Y/n]:')
@@ -38,18 +38,18 @@ class LoggedInMenu():
             return
         print('Projections for {}:'.format(movie_name))
         for projection in result_projections:
-            print('[{}] - {} {} ({})'.format(projection['ID'], projection['DATE'], projection['TIME'], projection['TYPE']))
+            print('[{}] - {} {} ({})'.format(projection.id, projection.date, projection.time, projection.projection_type))
 
     def __print_reservation(self, movie, projection, seats):
-        print('This is your reservation:\nMovie:{} {}\nDate and time: {} {}\nSeats: {}'.format(movie['NAME'], movie['RATING'],
-                projection['DATE'], projection['TIME'], ', '.join([str(x) for x in seats])))
+        print('This is your reservation:\nMovie:{} {}\nDate and time: {} {}\nSeats: {}'.format(movie.name, movie.rating,
+                projection.date, projection.time, ', '.join([str(x) for x in seats])))
 
     @clear_screen
     def __print_user_reservations(self, user_id):
         reservations = self.vm.get_all_user_reservations(user_id)
         print('There are your reservations:')
         for r in reservations:
-            print('{0}) {1} on {2} {3}'.format(r['PROJECTION_ID'], r['MOVIE_NAME'], r['PROJECTION_DATE'], r['PROJECTION_TIME']))
+            print('{0}) {1} on {2} {3}'.format(r[0].id, r[2].name, r[1].date, r[1].time))
 
     @clear_screen
     def start_interaction(self, username):
@@ -78,7 +78,7 @@ class LoggedInMenu():
 
                     # Getting the movie name from id
                     try:
-                        movie = [x for x in self.vm.show_all_movies() if x['ID'] == movie_id][0]
+                        movie = [x for x in self.vm.show_all_movies() if x.id == movie_id][0]
                     except IndexError:
                         print('There is no movie with this id')
                         # The continue lets the user choose again movie id
@@ -88,7 +88,7 @@ class LoggedInMenu():
                     print('Invalid movie id')
 
                 result_projections = self.vm.show_projections_for_movie(movie_id, date)
-                self.__print_projections(result_projections, movie['NAME'])
+                self.__print_projections(result_projections, movie.name)
 
             # Make a reservation
             elif comm == 3:
@@ -109,7 +109,7 @@ class LoggedInMenu():
                 # Get movie id from user
                 try:
                     movie_id = int(input('Please select the movie id:'))
-                    if movie_id not in [x['ID'] for x in all_movies]:
+                    if movie_id not in [x.id for x in all_movies]:
                         raise ValueError('There is no movie with this id')
                 except ValueError as e:
                     print(e)
@@ -119,7 +119,7 @@ class LoggedInMenu():
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
 
-                movie = [x for x in all_movies if x['ID'] == movie_id][0]
+                movie = [x for x in all_movies if x.id == movie_id][0]
                 projections = self.vm.show_projections_for_movie(movie_id)
                 if len(projections) == 0:
                     choose_another_movie = input('There are no projections for this movie.\nDo you wish to make a reservation for another one?[Y/n]:')
@@ -128,11 +128,11 @@ class LoggedInMenu():
                     else:
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
-                self.__print_projections(projections, movie['NAME'])
+                self.__print_projections(projections, movie.name)
                 # Get projection id
                 try:
                     projection_id = int(input('Select projection date:'))
-                    if projection_id not in [x['ID'] for x in projections]:
+                    if projection_id not in [x.id for x in projections]:
                         raise ValueError('There is no projection with this id!')
                 except ValueError as e:
                     print(e)
@@ -159,8 +159,8 @@ class LoggedInMenu():
                     else:
                         comm = input(self.r.CHOOSE_OPTION_MESSAGE)
                         continue
-                movie = [x for x in all_movies if x['ID'] == movie_id][0]
-                projection = [x for x in projections if x['ID'] == projection_id][0]
+                movie = [x for x in all_movies if x.id == movie_id][0]
+                projection = [x for x in projections if x.id == projection_id][0]
                 # print(movie['NAME'])
                 self.__print_reservation(movie, projection, seats)
 
@@ -177,7 +177,7 @@ class LoggedInMenu():
                 if should_finalize:
                     for ticket in seats:
                         # Option to cancel reservation here?
-                        if not self.vm.create_reservation(user_id, projection['ID'], ticket[0], ticket[1]):
+                        if not self.vm.create_reservation(user_id, projection.id, ticket[0], ticket[1]):
                             print('Seats "{0}" already taken! Not saving those.'.format(ticket))
                         else:
                             print('Saved {}'.format(ticket))

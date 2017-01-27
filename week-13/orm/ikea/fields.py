@@ -1,18 +1,18 @@
-from ikea.base import BaseMeta
+from base import ColumnMeta
 
 
-class Field(metaclass=BaseMeta):
-    __tablename__ = None
+class Column(metaclass=ColumnMeta):
+    pass
 
 
-class PKColumn(Field):
-    __tablename__ = 'PKColumn'
+class PKColumn(Column):
+    pass
 
 
-class IntegerColumn(Field):
-    __tablename__ = 'IntegerColumn'
+class IntegerColumn(Column):
+    pass
 
 
-class TextColumn(Field):
-    __tablename__ = 'TextColumn'
+class TextColumn(Column):
+    pass
 

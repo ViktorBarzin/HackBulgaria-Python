@@ -15,6 +15,6 @@ class Student(User):
     shirt_size = IntegerColumn(number=1)
 
 
-# Creating all tables from BaseModel class
+# Creating all tables from BaseModelMeta class
 BaseModel.create_all_tables()
 
