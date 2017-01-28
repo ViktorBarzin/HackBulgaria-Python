@@ -1,6 +1,7 @@
 import credentials
 
 CONNECTION_STRING = 'bank.db'
+DB_TYPE = 'sqlite'
 BAN_LIST_FILE = 'ban-list.json'
 BAN_TIME = 300
 WRONG_PASSWORD_ATTEPMTS = 5

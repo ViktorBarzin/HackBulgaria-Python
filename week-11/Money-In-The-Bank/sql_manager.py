@@ -1,23 +1,23 @@
-import creation_queries as create_db
-import insert_queries as insert
 import random
-import select_queries as select
 import smtplib
-import sqlite3
-import update_queries as update
 import uuid
-import delete_queries as delete
-from client import Client
 from decorators import hash_password, check_password_requirements, check_username_requirements, check_if_banned, check_ban_list_file, check_email_requirements
 from helpers import change_failed_password_attempts, clear_login_ban_records
-from settings import CONNECTION_STRING, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY, MAX_TAN_CODES
+from settings import CONNECTION_STRING, DB_TYPE, BAN_LIST_FILE as ban_file, WRONG_PASSWORD_ATTEPMTS, EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, EMAIL_SUBJ, EMAIL_BODY, MAX_TAN_CODES
+
+from models import Client, TanCode
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 
 class Db_Manager:
     def __init__(self):
-        self.conn = sqlite3.connect(CONNECTION_STRING)
-        self.conn.row_factory = sqlite3.Row
-        self.cursor = self.conn.cursor()
+        self.engine = create_engine('{}:///{}'.format(DB_TYPE, CONNECTION_STRING))
+        Session = sessionmaker(bind=self.engine)
+        self.session = Session()
+        # self.conn = sqlite3.connect(CONNECTION_STRING)
+        # self.conn.row_factory = sqlite3.Row
+        # self.cursor = self.conn.cursor()
 
     def register(self, username, password, email):
         self.validate_username(username=username)
@@ -49,46 +49,43 @@ class Db_Manager:
     def set_username(self, username):  # Add a decorator to modify username if needed
         return username
 
-    def create_clients_table(self):
-        # self.cursor.execute(create_db.CREATE_CLIENT_TABLE)
-        self.cursor.execute(create_db.CREATE_TAN_CODE_USER_TABLE)
-
-    def change_message(self, new_message, logged_user):
-        self.cursor.execute(update.CHANGE_MESSAGE, (new_message, logged_user.get_id()))
-        self.conn.commit()
-        logged_user.set_message(new_message)
-
-    def _change_pass(self, password, logged_user):
-        self.cursor.execute(update.CHANGE_PASS, (password, logged_user.get_id()))
-        self.conn.commit()
+    def change_message(self, new_message, client):
+        # client = self.session.query(Client).filter(Client.user.id == logged_user.get_id()).first()
+        if not client:
+            raise ValueError('No user with the provided id!')
+        client.message = new_message
+        # self.cursor.execute(update.CHANGE_MESSAGE, (new_message, logged_user.get_id()))
+        # self.conn.commit()
+        client.message = new_message
+        self.session.commit()
 
     def change_pass(self, password, username):
-        try:
-            user = [x for x in self.get_all_users() if x['username'] == username][0]
-        except IndexError:
+        client = self.session.query(Client).filter(Client.username == username).first()
+        if not client:
             raise ValueError('No such user')
-        user_to_client = Client(user['id'], user['username'], user['balance'], user['message'])
-        return self.__change_pass(password, user_to_client)
+        return self.__change_pass(password, client)
 
     def __change_pass(self, password, user):
-        self.validate_password(password=password, username=user.get_username())
+        self.validate_password(password=password, username=user.username)
         password = self.set_password(password=password)
-        self._change_pass(password, user)
 
+        user.password = password
+        self.session.commit()
         return True
 
     def _register(self, username, password, email):
-        self.cursor.execute(insert.CREATE_USER, (username, password, email))
-        self.conn.commit()
+        client = Client(username=username, password=password, email=email)
+        self.session.add(client)
+        self.session.commit()
+        # self.cursor.execute(insert.CREATE_USER, (username, password, email))
+        # self.conn.commit()
 
     def reset_password(self, username):
         token = self.__set_reset_token_for(username)
-        try:
-            user = [x for x in self.get_all_users() if x['USERNAME'] == username][0]
-        except IndexError as e:
-            print(e)
-        #     raise ValueError('No such user')
-        self.__send_token_to_email(token, user['EMAIL'])
+        client = self.session.query(Client).filter(Client.username == username).first()
+        if not client:
+            raise ValueError('There is no user with this username')
+        self.__send_token_to_email(token, client.email)
 
     def __send_token_to_email(self, token, email):
         self.send_email(EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD,
@@ -119,84 +116,89 @@ class Db_Manager:
 
     def __set_reset_token_for(self, username):
         token = random.randint(1, abs(hash(username)) + 2) % 10000000
-        self.cursor.execute(update.CREATE_PASSWORD_RESET_TOKEN, (str(token), username))
-        self.conn.commit()
+        client = self.session.query(Client).filter(Client.username == username).first()
+        if not client:
+            raise ValueError('There is no user with this username')
+        client.password_reset_token = token
+        self.session.commit()
+        # self.cursor.execute(update.CREATE_PASSWORD_RESET_TOKEN, (str(token), username))
+        # self.conn.commit()
         return token
 
-# Why the fuck are the decorators executed from top-to-bottom?
     @check_ban_list_file
     @hash_password
     @check_if_banned(ban_file)
     def login(self, username, password):
-        self.cursor.execute(select.LOGIN, (username, password))
-        user = self.cursor.fetchone()
-        if(user):
+        # self.cursor.execute(select.LOGIN, (username, password))
+        # user = self.cursor.fetchone()
+        user = self.session.query(Client).filter(Client.username == username).filter(Client.password == password).first()
+        if user:
             clear_login_ban_records(ban_file, username, WRONG_PASSWORD_ATTEPMTS)
-            return Client(user['ID'], user['USERNAME'], user['BALANCE'], user['MESSAGE'])
+            return user
         else:
             # If such user exists, put a black point, else just ignore
-            if username in [x['username'] for x in self.get_all_users()]:
+            if username in [x.username for x in self.get_all_users()]:
                 change_failed_password_attempts(ban_file, username, 1)
             return False
 
     def get_all_users(self):
-        return self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
+        return self.session.query(Client).all()
+        # return self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
 
     def check_token(self, username, token):
-        try:
-            user = [x for x in self.cursor.execute(select.SELECT_ALL_USERS).fetchall() if x['username'] == username][0]
-        except IndexError:
+        client = self.session.query(Client).filter(Client.username == username).first()
+        # user = [x for x in self.cursor.execute(select.SELECT_ALL_USERS).fetchall() if x['username'] == username][0]
+        if not client:
             raise ValueError('There is no user with this username')
-        return user['password_reset_token'] == str(token)
+        return client.password_reset_token == str(token)
 
     def show_balance(self, username):
-        try:
-            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
-            user = users[0]
-        except IndexError:
+        client = self.session.query(Client).filter(Client.username == username).first()
+        if not client:
             raise ValueError('No such user')
-        return user['balance']
+        return client.balance
 
     def __request_tan(self, user):
         tan = input('Enter your tan code:')
-        tans = [x['tan_code'] for x in self.cursor.execute(select.SELECT_ALL_TAN_CODES).fetchall() if x['user_id'] == user['id']]
-        if tan not in tans:
+        tans = user.tan_codes
+        # tans = [x['tan_code'] for x in self.cursor.execute(select.SELECT_ALL_TAN_CODES).fetchall() if x['user_id'] == user['id']]
+        if tan not in [x.tan_code for x in tans]:
             raise ValueError('Invalid tan code')
         return tan
 
     def update_balance(self, username, amount):
-        try:
-            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
-            user = [x for x in users if x['USERNAME'] == username][0]
-        except IndexError:
+        # Expected to catch the value error in an upper level
+        amount = float(amount)
+
+        user = self.session.query(Client).filter(Client.username == username).first()
+        if not user:
             raise ValueError('No such user')
-        new_balance = float(user['balance'] + amount)
+        new_balance = float(user.balance + amount)
         if new_balance < 0:
             raise ValueError('Cannot have negative balance!')
         tan = self.__request_tan(user)
-        self.cursor.execute(update.CHANGE_BALANCE_FOR_USER, (new_balance, username))
-        self.cursor.execute(delete.DELETE_TAN, (tan,))
-        self.conn.commit()
+        user.balance = new_balance
+        self.session.query(TanCode).filter(TanCode.tan_code == tan).delete()
+        self.session.commit()
+        # self.cursor.execute(update.CHANGE_BALANCE_FOR_USER, (new_balance, username))
+        # self.cursor.execute(delete.DELETE_TAN, (tan,))
+        # self.conn.commit()
         return True
 
     def get_tan(self, username):
-        try:
-            users = self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
-            user = [x for x in users if x['USERNAME'] == username][0]
-        except IndexError:
+        user = self.session.query(Client).filter(Client.username == username).first()
+        if not user:
             raise ValueError('No such user')
-        tan_codes = self.cursor.execute(select.SELECT_ALL_TAN_CODES).fetchall()
-        user_tan_codes = [x for x in tan_codes if x['USER_ID'] == user['ID']]
         # If the user has no tan_codes return
-        if len(user_tan_codes) != 0:
-            raise ValueError('You have {} more codes!'.format(len(user_tan_codes)))
+        if len(list(user.tan_codes)) != 0:
+            raise ValueError('You have {} more codes!'.format(len(user.tan_codes)))
 
         # User has no tan_codes so create and email to him new codes
-        tans = [str(uuid.uuid4()) for x in range(MAX_TAN_CODES)]
-        # Doing a for because executemany did not work out ;\
-        for tan in tans:
-            self.cursor.execute(insert.INSERT_TAN, (user['ID'], tan))
-        self.conn.commit()
+        tans = [TanCode(tan_code=str(uuid.uuid4()), user_id = user.id) for x in range(MAX_TAN_CODES)]
+        for x in tans:
+            user.tan_codes.append(x)
+        self.session.commit()
+
         # Email message
-        message = 'These are your unique TAN codes. Keep them safe!\n\n{}'.format('\n\n'.join(tans))
-        self.send_email(EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, user['email'], 'TAN codes', message)
+        message = 'These are your unique TAN codes. Keep them safe!\n\n{}'.format('\n\n'.join(x.tan_code for x in tans))
+        self.send_email(EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, user.email, 'TAN codes', message)

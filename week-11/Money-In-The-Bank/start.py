@@ -51,6 +51,8 @@ def main_menu():
                 # Add writing password again for verification?
 
                 sql_manager.change_pass(password, username)
+            else:
+                print('Invalid reset token!')
         elif command == 'help':
             print("login - for logging in!")
             print("register - for creating new account!")
@@ -129,6 +131,9 @@ def logged_menu(logged_user):
             print("changepass - for changing passowrd")
             print("change-message - for changing users message")
             print("show-message - for showing users message")
+            print('deposit - to deposit money')
+            print('get-tan - to get tan codes if you dont have any')
+            print('help - to show this menu')
         elif command == 'exit':
             return
         else:
