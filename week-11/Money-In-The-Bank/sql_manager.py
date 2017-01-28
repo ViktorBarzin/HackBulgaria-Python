@@ -15,9 +15,6 @@ class Db_Manager:
         self.engine = create_engine('{}:///{}'.format(DB_TYPE, CONNECTION_STRING))
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
-        # self.conn = sqlite3.connect(CONNECTION_STRING)
-        # self.conn.row_factory = sqlite3.Row
-        # self.cursor = self.conn.cursor()
 
     def register(self, username, password, email):
         self.validate_username(username=username)
@@ -50,12 +47,9 @@ class Db_Manager:
         return username
 
     def change_message(self, new_message, client):
-        # client = self.session.query(Client).filter(Client.user.id == logged_user.get_id()).first()
         if not client:
             raise ValueError('No user with the provided id!')
         client.message = new_message
-        # self.cursor.execute(update.CHANGE_MESSAGE, (new_message, logged_user.get_id()))
-        # self.conn.commit()
         client.message = new_message
         self.session.commit()
 
@@ -77,8 +71,6 @@ class Db_Manager:
         client = Client(username=username, password=password, email=email)
         self.session.add(client)
         self.session.commit()
-        # self.cursor.execute(insert.CREATE_USER, (username, password, email))
-        # self.conn.commit()
 
     def reset_password(self, username):
         token = self.__set_reset_token_for(username)
@@ -121,16 +113,12 @@ class Db_Manager:
             raise ValueError('There is no user with this username')
         client.password_reset_token = token
         self.session.commit()
-        # self.cursor.execute(update.CREATE_PASSWORD_RESET_TOKEN, (str(token), username))
-        # self.conn.commit()
         return token
 
     @check_ban_list_file
     @hash_password
     @check_if_banned(ban_file)
     def login(self, username, password):
-        # self.cursor.execute(select.LOGIN, (username, password))
-        # user = self.cursor.fetchone()
         user = self.session.query(Client).filter(Client.username == username).filter(Client.password == password).first()
         if user:
             clear_login_ban_records(ban_file, username, WRONG_PASSWORD_ATTEPMTS)
@@ -143,11 +131,9 @@ class Db_Manager:
 
     def get_all_users(self):
         return self.session.query(Client).all()
-        # return self.cursor.execute(select.SELECT_ALL_USERS).fetchall()
 
     def check_token(self, username, token):
         client = self.session.query(Client).filter(Client.username == username).first()
-        # user = [x for x in self.cursor.execute(select.SELECT_ALL_USERS).fetchall() if x['username'] == username][0]
         if not client:
             raise ValueError('There is no user with this username')
         return client.password_reset_token == str(token)
@@ -161,7 +147,6 @@ class Db_Manager:
     def __request_tan(self, user):
         tan = input('Enter your tan code:')
         tans = user.tan_codes
-        # tans = [x['tan_code'] for x in self.cursor.execute(select.SELECT_ALL_TAN_CODES).fetchall() if x['user_id'] == user['id']]
         if tan not in [x.tan_code for x in tans]:
             raise ValueError('Invalid tan code')
         return tan
@@ -180,9 +165,6 @@ class Db_Manager:
         user.balance = new_balance
         self.session.query(TanCode).filter(TanCode.tan_code == tan).delete()
         self.session.commit()
-        # self.cursor.execute(update.CHANGE_BALANCE_FOR_USER, (new_balance, username))
-        # self.cursor.execute(delete.DELETE_TAN, (tan,))
-        # self.conn.commit()
         return True
 
     def get_tan(self, username):
@@ -194,7 +176,7 @@ class Db_Manager:
             raise ValueError('You have {} more codes!'.format(len(user.tan_codes)))
 
         # User has no tan_codes so create and email to him new codes
-        tans = [TanCode(tan_code=str(uuid.uuid4()), user_id = user.id) for x in range(MAX_TAN_CODES)]
+        tans = [TanCode(tan_code=str(uuid.uuid4()), user_id=user.id) for x in range(MAX_TAN_CODES)]
         for x in tans:
             user.tan_codes.append(x)
         self.session.commit()
