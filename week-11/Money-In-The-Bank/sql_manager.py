@@ -177,10 +177,10 @@ class Db_Manager:
 
         # User has no tan_codes so create and email to him new codes
         tans = [TanCode(tan_code=str(uuid.uuid4()), user_id=user.id) for x in range(MAX_TAN_CODES)]
-        for x in tans:
-            user.tan_codes.append(x)
+        user.tan_codes.extend(tans)
         self.session.commit()
 
         # Email message
         message = 'These are your unique TAN codes. Keep them safe!\n\n{}'.format('\n\n'.join(x.tan_code for x in tans))
         self.send_email(EMAIL_ACCOUNT_USER, EMAIL_ACCOUNT_PASSWORD, user.email, 'TAN codes', message)
+

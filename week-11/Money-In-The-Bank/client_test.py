@@ -2,7 +2,7 @@ import sys
 import unittest
 sys.path.append("..")
 
-from client import Client
+from models import Client
 
 
 class ClientTests(unittest.TestCase):

@@ -39,9 +39,6 @@ class TanCode(Base):
     user_id = Column(Integer, ForeignKey('client.id'), nullable=False)
     tan_code = Column(String(250), nullable=False)
 
-    # client = relationship(Client, backref='tan_codes')
-    # client = relationship('Client', back_populates='tan_codes')
-
 
 if __name__ == '__main__':
     engine = create_engine('{}:///{}'.format(DB_TYPE, CONNECTION_STRING))
