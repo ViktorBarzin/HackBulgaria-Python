@@ -4,3 +4,4 @@ venv*
 .svn*
 *credentials*
 *.pyc
+*.db
