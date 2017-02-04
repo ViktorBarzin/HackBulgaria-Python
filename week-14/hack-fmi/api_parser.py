@@ -24,20 +24,22 @@ def parse_skills(skills_json):
     return skill_objs
 
 
-def parse_teams(teams_json):
+def parse_teams(teams_json, session):
     team_objs = []
     for team in teams_json:
-        new_team = Team(id=team['id'], name=team['name'],
+        new_team = Team(name=team['name'],
             idea_description=team['idea_description'], repository=team['repository'],
             need_more_members=team['need_more_members'], room=team['room'],
             place=team['place'])
         if team['technologies_full']:
             for skill in team['technologies_full']:
-                if skill in new_team.technologies:
-                    continue
-                new_team.technologies.append(Skill(id=skill['id'], name=skill['name']))
+                try:
+                    skill = session.query(Skill).filter(Skill.name == skill['name']).one()
+                    # print(skill)
+                    new_team.skill.append(skill)
+                except Exception:
+                    new_team.skill = [Skill(name=skill['name'])]
         team_objs.append(new_team)
-    # import ipdb; ipdb.set_trace()# BREAKPOINT)
 
     return team_objs
 
@@ -52,7 +54,7 @@ def main():
     # skill_objs = parse_skills(skills_json)
 
     teams_json = requests.get(TEAM_API).json()
-    team_objs = parse_teams(teams_json)
+    team_objs = parse_teams(teams_json, session)
     # Add models to db
 
     # session.add_all(skill_objs)

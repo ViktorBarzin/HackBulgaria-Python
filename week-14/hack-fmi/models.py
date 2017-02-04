@@ -28,16 +28,9 @@ class Team(Base):
     room = Column(String(250))
     place = Column(Integer, default=None)
 
-    technologies = relationship('Skill', secondary=technology_team)
+    skill = relationship('Skill', back_populates='team', secondary=technology_team)
     # team_skill_id = Column(Integer, ForeignKey('teamskill.team_id'))
-    # mentors = relationship('mentor', backref='teams', secondary='mentorship')
-
-# class Mentorship(Base):
-#     __tablename__ = 'mentorship'
-
-#     id = Column(Integer, primary_key=True)
-#     mentor_id = Column(Integer, ForeignKey('mentor.id'))
-#     team_id = Column(Integer, ForeignKey('team.id'))
+    mentor = relationship('Mentor', back_populates='team', secondary=mentorship_table)
 
 
 class Mentor(Base):
@@ -49,16 +42,8 @@ class Mentor(Base):
     picture = Column(String(250))
     # team_id = Column(Integer, ForeignKey('team.id'))
 
-    teams = relationship('Team', backref='mentors', secondary=mentorship_table)
-
-
-
-# class TeamSkill(Base):
-#     __tablename__ = 'teamskill'
-
-#     id = Column(Integer, primary_key=True)
-#     team_id = Column(Integer, ForeignKey('team.id'))
-#     skill_id = Column(Integer, ForeignKey('skill.id'))
+    team = relationship('Team', secondary=mentorship_table,
+                        back_populates='mentor')
 
 
 class Skill(Base):
@@ -66,6 +51,8 @@ class Skill(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250))
+    team = relationship('Team', secondary=technology_team, back_populates='skill')
+
 
 
 if __name__ == '__main__':
