@@ -1,1 +1,0 @@
-log_process took 0.000151 seconds to execute
