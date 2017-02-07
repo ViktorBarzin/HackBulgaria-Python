@@ -62,36 +62,39 @@
 
             <div class="col-4" id="primes_container">
                 <div class="form-container">
-                    <form action="">
+                    <form method="POST" action="{% url 'primes' %}">
+                        {% csrf_token %}
                         <p>List first n prime numbers.</p>
                         <label>Enter n:</label>
-                        <input type="number" />
+                        <input type="number" name="number"/>
                         <input type="submit" value="Go!" />
-                        <p>Result is:</p>
+                        <p>Result is:{{ prime_result }}</p>
                     </form>
                 </div>
             </div>
 
             <div class="col-4" id="rle_container">
                 <div class="form-container">
-                    <form action="">
+                    <form method="POST" action="{% url 'rle_en' %}">
+                        {% csrf_token %}
                         <p>Encode <a href="https://en.wikipedia.org/wiki/Run-length_encoding">RLE.</a></p>
                         <label>Enter string:</label>
-                        <input type="text" />
+                        <input type="text" name="text"/>
                         <input type="submit" value="Go!" />
-                        <p>RLE is:</p>
+                        <p>RLE is: {{ encoded }}</p>
                     </form>
                 </div>
             </div>
 
             <div class="col-4" id="some_container">
                 <div class="form-container">
-                    <form action="">
+                    <form method="POST" action="{% url 'rle_dec' %}">
+                        {% csrf_token %}
                         <p>Decode <a href="https://en.wikipedia.org/wiki/Run-length_encoding">RLE.</a></p>
                         <label>Enter RLE string:</label>
-                        <input type="text" />
+                        <input type="text" name="text"/>
                         <input type="submit" value="Go!" />
-                        <p>Decoded string is:</p>
+                        <p>Decoded string is: {{ decoded }}</p>
                     </form>
                 </div>
             </div>

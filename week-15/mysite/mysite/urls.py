@@ -22,6 +22,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^factorial/$', views.factorial, name='factorial'),
-    url(r'^fibonacci/$', views.fibonacci, name='fibonacci')
+    url(r'^fibonacci/$', views.fibonacci, name='fibonacci'),
+    url(r'primes/$', views.prime_calc, name='primes'),
+    url(r'rle_encode/$', views.encode_rle, name='rle_en'),
+    url(r'rle_decode/$', views.decode_rle, name='rle_dec'),
+
     # url(r'^.*$', views.not_found)
 ]
