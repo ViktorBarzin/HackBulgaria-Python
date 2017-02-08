@@ -1,0 +1,21 @@
+<div>
+    <label> Info about {{ course.name }}</label>
+</div>
+<div>
+    <label> Description: {{ course.description }} </label>
+</div>
+<div>
+    <label> Start date: {{ course.start_date }} </label>
+</div>
+<div>
+    <label> End date: {{ course.end_date }} </label>
+</div>
+<p> Lectures:</p>
+{% for lecture in lectures %}
+<div>
+    <label> Name: {{ lecture.name }}</label>
+    <label> Week: {{ lecture.week }}</label>
+    <a href="/lecture/{{ lecture.id }}"> Lecture info</a>
+</div>
+
+{% endfor %}

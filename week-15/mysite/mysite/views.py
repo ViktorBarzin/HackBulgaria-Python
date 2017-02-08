@@ -38,5 +38,6 @@ def decode_rle(request):
     decoded = run_lenght_decode(inp)
     return render(request, 'index.html', locals())
 
+
 def not_found(request):
     return HttpResponse('Nqma takava stranica moi!')

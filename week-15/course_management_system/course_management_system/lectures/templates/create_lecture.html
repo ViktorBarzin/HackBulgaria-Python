@@ -1,0 +1,33 @@
+<form method="POST" action="">
+    {% csrf_token %}
+    {% if created_lecture %}
+        <p>{{ created_lecture }}</p>
+    {% else %}
+        <p>Enter new course:</p>
+    {% endif %}
+    <div>
+        <label>Lecture name</label>
+        <input type="string" name="lecture_name"/>
+    </div>
+
+    <div>
+        <label>Week number</label>
+        <input type="number" name="week"/>
+    </div>
+
+    <div>
+        <label>Course</label>
+        <select name="course_id_selector">
+        {% for course in courses%}
+            <option value="{{ course.id }}">{{ course.name }} </option>
+        {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label>Lecture url</label>
+        <input type="string" name="lecture_url"/>
+    </div>
+    <input type="submit" value="Go!" />
+</form>
+

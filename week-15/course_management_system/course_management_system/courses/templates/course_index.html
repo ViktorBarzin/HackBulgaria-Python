@@ -1,0 +1,21 @@
+<table border="1">
+    <tr>
+        <td>Course name</td>
+        <td>Description</td>
+        <td>Start Date</td>
+        <td>End Date</td>
+        <td>Approximate duration</td>
+        <td>Detailed course info</td>
+    </tr>
+    {% for course in courses%}
+    <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.start_date }}</td>
+        <td>{{ course.end_date }}</td>
+        <td>{{ course.start_date|timesince:course.end_date}}</td>
+        <td><a href="/course/{{ course.name}}">To course</a></td>
+    </tr>
+    {% endfor %}
+</table>
+

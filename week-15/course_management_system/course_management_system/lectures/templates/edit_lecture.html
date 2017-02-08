@@ -1,0 +1,36 @@
+<form method="POST" action="">
+    {% csrf_token %}
+    {% if successfully_updated_msg%}
+        <p>{{ successfully_updated_msg }}</p>
+    {% else %}
+        <p>Change lecture:</p>
+    {% endif %}
+    <div>
+        <label>Lecture name</label>
+        <input type="text" name="lecture_name" value="{{ lecture.name }}" />
+    </div>
+
+    <div>
+        <label>Week</label>
+        <input type="number" name="lecture_week" value="{{ lecture.week}}"/>
+    </div>
+
+    <div>
+        <label>Course</label>
+        <select name="course_id_selector">
+            {% for course in courses%}
+                <option value="{{ course.id }}"
+               {% if course == lecture.course%} selected="selected"{% endif %}>
+                    {{ course.name }}
+                </option>
+            {% endfor%}
+        </select>
+    </div>
+
+    <div>
+        <label>URL to presentation</label>
+        <input type="string" name="lecture_url" value="{{ lecture.url}}"/>
+    </div>
+
+    <input type="submit" value="Go!" />
+</form>
