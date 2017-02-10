@@ -4,4 +4,6 @@ __pycache__
 .svn*
 *credentials*
 *.pyc
+
 *.db
+db.*
