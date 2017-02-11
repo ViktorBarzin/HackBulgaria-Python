@@ -1,21 +1,39 @@
-<div>
-    <label> Info about {{ course.name }}</label>
-</div>
-<div>
-    <label> Description: {{ course.description }} </label>
-</div>
-<div>
-    <label> Start date: {{ course.start_date }} </label>
-</div>
-<div>
-    <label> End date: {{ course.end_date }} </label>
-</div>
-<p> Lectures:</p>
-{% for lecture in lectures %}
-<div>
-    <label> Name: {{ lecture.name }}</label>
-    <label> Week: {{ lecture.week }}</label>
-    <a href="/lecture/{{ lecture.id }}"> Lecture info</a>
-</div>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
 
-{% endfor %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12"><h3>Info about: <span style="font-weight:bold">{{ course.name }}</span></h3></div>
+        <div class="col-md-12"><h3>Description: <span style="font-weight:bold">{{ course.description }}</span></h3></div>
+        <div class="col-md-12"><h3>Start date: <span style="font-weight:bold">{{ course.start_date }}</span></h3></div>
+        <div class="col-md-12"><h3>End date: <span style="font-weight:bold">{{ course.end_date }}</span></h3></div>
+    </div>
+
+    {% if not lectures%}
+    <p> No lectures for this course!</p>
+    {% else %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Week</th>
+                <th>Course name</th>
+                <th>Materials url</th>
+            </tr>
+        </thead>
+        {% for lecture in lectures %}
+        <tr>
+            <td> {{ lecture.name }}</td>
+            <td> {{ lecture.week }}</td>
+            <td> {{ lecture.course.name }}</td>
+            <td> <a href="{{ lecture.url }}"> {{ lecture.url }}</a></td>
+            <td> <a href="/lecture/{{ lecture.id }}"> Lecture info</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <button class="btn btn-success" onclick="history.back();">Back</button>
+</div>
