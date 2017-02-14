@@ -1,0 +1,9 @@
+<form method="POST">
+    {% csrf_token %}
+    <input type="string" placeholder="email" name="email" />
+    <input type="password" placeholder="password" name="password" />
+    <input type="submit" value="register">
+</form>
+{% if user_exists %}
+<h3>  {{ user_exists }}</h3>
+{% endif %}
