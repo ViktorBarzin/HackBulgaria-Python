@@ -25,7 +25,7 @@ SECRET_KEY = 'fl&*cq51_syv^3&z19o7+iva%ati3ev2*%lkj**3m03pa=2l_2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'course_management_system.courses',
     'course_management_system.lectures',
-
+    'course_management_system.logged_in',
+    'course_management_system.baseapp'
 ]
 
 MIDDLEWARE = [

@@ -6,14 +6,18 @@ from course_management_system.lectures.models import Lecture
 
 from django.http import Http404
 from django.http import HttpResponseForbidden
+from course_management_system.logged_in.decorators import login_required, is_super_user
 # Create your views here.
 
 
+@login_required('/login')
 def course_index(request):
     courses = Course.objects.all().order_by('start_date')
     return render(request, 'course_index.html', locals())
 
 
+@login_required('/login')
+# @is_super_user
 def create_course(request):
     if request.method == 'POST':
         name = request.POST.get('course_name').rstrip()
@@ -25,6 +29,7 @@ def create_course(request):
     return render(request, 'new_course.html', locals())
 
 
+@login_required('/login')
 def course_info(request, course_name):
     course = Course.objects.filter(name__iexact=course_name).first()
     lectures = Lecture.objects.filter(course=course).all()
@@ -33,6 +38,8 @@ def course_info(request, course_name):
     return render(request, 'course_info.html', locals())
 
 
+@login_required('/login')
+@is_super_user
 def edit_course(request, course_name):
     courses = Course.objects.all()
     course = Course.objects.all().filter(name__iexact=course_name).first()

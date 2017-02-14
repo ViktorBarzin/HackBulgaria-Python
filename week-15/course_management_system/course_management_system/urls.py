@@ -16,10 +16,17 @@ Including another URLconf
 
 from django.conf.urls import url, include
 from django.contrib import admin
+from course_management_system.logged_in import views as logged_in_views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', include('course_management_system.courses.urls')),
+    # url(r'^$', include('course_management_system.courses.urls')),
+    url(r'^$', logged_in_views.login),
     url(r'^course/', include('course_management_system.courses.urls')),
-    url(r'^lecture/', include('course_management_system.lectures.urls'))
+    url(r'^lecture/', include('course_management_system.lectures.urls')),
+    url(r'^register/$', logged_in_views.register),
+    url(r'^login/$', logged_in_views.login),
+    url(r'^profile$', logged_in_views.profile),
+    url(r'^logout$', logged_in_views.logout)
 ]
