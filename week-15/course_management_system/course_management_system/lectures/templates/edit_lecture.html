@@ -4,41 +4,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
-
+{{ status_message }}
 <form method="POST" action="" class="form-group">
     {% csrf_token %}
-    {% if successfully_updated_msg%}
-        <p>{{ successfully_updated_msg }}</p>
-    {% else %}
-    <h1>Change lecture:</h1>
-    {% endif %}
-    <div class="form-group">
-        <label for="lct_name" >Lecture name</label>
-        <input class="form-control" id="lct_name" type="text" name="lecture_name" value="{{ lecture.name }}" />
-    </div>
-
-    <div class="form-group">
-        <label for="week">Week</label>
-        <input id="week" class="form-control" type="number" name="lecture_week" value="{{ lecture.week}}"/>
-    </div>
-
-    <div>
-        <label>Course</label>
-        <select class="form-control" name="course_id_selector">
-            {% for course in courses%}
-                <option value="{{ course.id }}"
-               {% if course == lecture.course%} selected="selected"{% endif %}>
-                    {{ course.name }}
-                </option>
-            {% endfor%}
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="materials" >Materials</label>
-        <input class="form-control" id="materials" type="text" name="lecture_url" value="{{ lecture.url }}" />
-    </div>
-
+    {{ form.as_p }}
     <div class="">
         <input class="btn btn-primary" type="submit" value="Save changes!" />
         <input class="btn btn-primary col-md-push-1" type="submit" value="Back" onclick="history.back();" />

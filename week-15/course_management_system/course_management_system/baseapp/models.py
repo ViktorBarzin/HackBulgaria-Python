@@ -11,6 +11,9 @@ class User(models.Model):
     # Should be a type rather bool, but for this project is fine
     is_lecturer = False
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Lecturer(User, models.Model):
     is_lecturer = True

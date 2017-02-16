@@ -1,26 +1,7 @@
 <form method="POST" action="">
     {% csrf_token %}
-    <p>{{ successfully_updated_msg }}</p>
-    <div>
-        <label>Course name</label>
-        <input type="text" name="course_name" value="{{ course.name }}" />
-    </div>
-
-    <div>
-        <label>Description</label>
-        <input type="text" name="course_description" value="{{ course.description}}"/>
-    </div>
-
-    <div>
-        <label>Start date</label>
-        <input type="date" name="course_start_date" value="{{ course.start_date }}"/>
-    </div>
-
-    <div>
-        <label>End date</label>
-        <input type="date" name="course_end_date" value="{{ course.end_date }}"/>
-    </div>
-
+    <p>{{ status_message }}</p>
+    {{ form.as_p }}
     <input type="submit" value="Go!" />
 </form>
 

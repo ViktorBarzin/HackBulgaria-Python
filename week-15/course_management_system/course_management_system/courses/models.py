@@ -9,5 +9,8 @@ class Course(models.Model):
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
-    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, blank=True, null=True)
+    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 

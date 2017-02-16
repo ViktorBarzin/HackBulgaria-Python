@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^lecture/', include('course_management_system.lectures.urls')),
     url(r'^register/$', logged_in_views.register),
     url(r'^login/$', logged_in_views.login),
-    url(r'^profile$', logged_in_views.profile),
+    url(r'^profile$', logged_in_views.profile, name='profile'),
     url(r'^logout$', logged_in_views.logout)
 ]

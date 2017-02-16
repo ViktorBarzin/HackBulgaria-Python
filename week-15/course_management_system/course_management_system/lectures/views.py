@@ -5,23 +5,31 @@ from django.http import Http404
 
 from course_management_system.courses.models import Course
 from course_management_system.lectures.models import Lecture
+from course_management_system.lectures.forms import CreateLectureForm, EditLectureForm
 
 
 def create_lecture(request):
     courses = Course.objects.all()
     if request.method == 'POST':
-        name = request.POST.get('lecture_name')
-        week = int(request.POST.get('week'))
-        course = Course.objects.filter(id=request.POST.get('course_id_selector')).first()
-        url = request.POST.get('lecture_url')
+        form = CreateLectureForm(request.POST)
+        name = form.data.get('name')
+        import ipdb; ipdb.set_trace()# BREAKPOINT)
+
+        # if Lecture.objects.filter(name=name)
+        week = int(form.data.get('week'))
+        course = Course.objects.filter(id=form.data.get('course')).first()
+        url = form.data.get('url')
 
         Lecture.objects.create(name=name, week=week, course=course, url=url)
-        # create_lecture is for visualizing in html
-        created_lecture = 'You have successfully added a new lecture!'
+        if form.is_valid():
+            form.save()
+            status_message = 'You have successfully added a new lecture!'
+        else:
+            status_message = 'You have entered invalid data!'
 
         # TODO: refreshing the page generates new post request so consider
         # redirecting to somewhere?
-
+    form = CreateLectureForm()
     return render(request, 'create_lecture.html', locals())
 
 
@@ -54,6 +62,7 @@ def edit_lecture(request, lecture_id):
         # return redirect('https://www.google.com')
         return redirect(f'/lecture/{lecture.id}')
 
+    form = EditLectureForm(initial=lecture.__dict__)
     return render(request, 'edit_lecture.html', locals())
 
 
